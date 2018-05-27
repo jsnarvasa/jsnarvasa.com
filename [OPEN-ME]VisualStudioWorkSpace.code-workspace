@@ -4,5 +4,7 @@
 			"path": "app"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"python.pythonPath": "C:\\Users\\jsnar\\AppData\\Local\\Programs\\Python\\Python36\\python.exe"
+	}
 }
