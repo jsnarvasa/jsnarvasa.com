@@ -1,5 +1,6 @@
 from flask import Flask, render_template, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
+from random import randint
 import yaml
 
 
@@ -35,6 +36,18 @@ def index():
 @app.route("/send_image/<filename>")
 def send_image(filename):
     return send_from_directory("static/images/", filename)
+
+
+# Setting variables to be called in the base template
+# Ideal color #1894EB
+@app.context_processor
+def generate_random_color():
+    r = lambda: randint(0,50)
+    g = lambda: randint(100,180)
+    b = lambda: randint(180,220)
+    color = '#%02X%02X%02X' % (r(),g(),b())
+    print(color)
+    return dict(generated_color=color)
 
 
 if __name__ == "__main__":
