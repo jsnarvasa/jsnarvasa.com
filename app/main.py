@@ -29,8 +29,13 @@ class Photos(db.Model):
 
 @app.route("/")
 def index():
+    return render_template("index.html")
+
+
+@app.route("/gallery")
+def gallery():
     image_names = Photos.query.all()
-    return render_template("index.html", image_names=image_names)
+    return render_template("gallery.html", image_names=image_names)
 
 
 @app.route("/send_image/<filename>")

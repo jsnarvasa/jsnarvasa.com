@@ -1,0 +1,16 @@
+{% extends 'template.html' %}
+
+{% block title%}Gallery{% endblock %}
+{% block head %}{% endblock %}
+
+{% block body%}
+
+    <div class="card-columns">
+        {% for image_name in image_names %}
+        <div class="card">
+            <img class="img-fluid" src="{{url_for('send_image', filename=image_name['FileName'])}}">
+        </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

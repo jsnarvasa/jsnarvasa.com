@@ -9,3 +9,7 @@ body {
 .navbar-opacity {
     opacity:0.78;
 }
+
+.container-fluid {
+    padding:0;
+}
