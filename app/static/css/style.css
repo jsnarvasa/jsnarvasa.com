@@ -13,3 +13,9 @@ body {
 .container-fluid {
     padding:0;
 }
+
+#splash-image {
+    width:100%;
+	height:auto;
+	max-width:3456px;
+}

@@ -8,6 +8,7 @@
         <title>Home - Jesse Narvasa</title>
     </head>
     <body>
+        <!-- The navigation bar -->
         <nav class="navbar navbar-expand-sm navbar-light fixed-top" style="background-color:transparent">
             <div class="container">
                 <a class="navbar-brand" style="color:{{generated_color}}" href="/"><b>jsnarvasa</b></a>
@@ -28,11 +29,20 @@
             </div>
         </nav>
 
-        <div class="container-fluid">
-            <img class="img-fluid" src="{{url_for('send_image', filename='IMG_9871.jpg')}}"
+        
+        <!-- The splash image -->
+        <div class="container-fluid" style="height:100vh;overflow:hidden">
+            <img class="img-fluid" id="splash-image" src="{{url_for('send_image', filename='IMG_9871.jpg')}}">
         </div>
 
-        <!-- Javascript libraries-->
+        
+        <!-- Intro div -->
+        <div class="container-fluid" style="background-color:#f9f9f9">
+            <h2>Hi, I'm Jesse Narvasa</h2>
+        </div>
+
+
+        <!-- Loading Javascript libraries-->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <!-- Custom incompatible with homepage
             <script src="{{ url_for('static',filename='js/javascript.js') }}"></script>
