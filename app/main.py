@@ -39,7 +39,7 @@ def send_image(filename):
 
 
 # Setting variables to be called in the base template
-# Ideal color #1894EB
+# Ideal color #1894EB; color generated to be used by navbar
 @app.context_processor
 def generate_random_color():
     r = lambda: randint(0,50)
