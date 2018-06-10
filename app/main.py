@@ -46,7 +46,6 @@ def generate_random_color():
     g = lambda: randint(100,180)
     b = lambda: randint(180,220)
     color = '#%02X%02X%02X' % (r(),g(),b())
-    print(color)
     return dict(generated_color=color)
 
 

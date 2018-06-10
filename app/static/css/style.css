@@ -3,5 +3,9 @@ body {
 }
 
 .navbar-scroll-padding {
-    padding-top:50px;
-};
+    padding-top:55px;
+}
+
+.navbar-opacity {
+    opacity:0.78;
+}
