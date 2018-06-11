@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    var navbar = $('.navbar');
+    var navbar = $('#main-navbar');
     var container = $('#main-container');
 
 
@@ -19,3 +19,12 @@ $(document).ready(function() {
     document.onscroll = scroll;
 
 });
+
+// To center splash-intro message @index.html
+function splashIntro() {
+    var splashImgHeight = $('#splash-image-div').height();
+    $('#splash-intro').css('margin-top',splashImgHeight/2.2);
+};
+
+$(document).ready(splashIntro);
+$(window).on('resize', splashIntro);
