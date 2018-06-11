@@ -17,5 +17,14 @@ body {
 #splash-image {
     width:100%;
 	height:auto;
-	max-width:3456px;
+    max-width:3456px;
+    opacity:0.27;
+}
+
+#splash-intro {
+    z-index:100;
+    position:absolute;
+    top:50%;
+    color:#f9f9f9;
+    width:100%;
 }

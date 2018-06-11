@@ -25,20 +25,31 @@
                         <a class="nav-link" style="color:{{generated_color}}" href="/gallery">Gallery<span class="sr-only">(current)</span></a>
                     </li>
                     </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search Tags" aria-label="Search" style="background:transparent;border-color:{{generated_color}}">
+                            <button class="btn my-2 my-sm-0" style="border-color:{{generated_color}}; color:{{generated_color}}; background-color:transparent" type="submit">Search</button>
+                    </form>
                 </div>
             </div>
         </nav>
 
         
         <!-- The splash image -->
-        <div class="container-fluid" style="max-height:100vh;overflow:hidden">
+        <div class="container-fluid" style="max-height:100vh;overflow:hidden;background-color: #000000">
             <img class="img-fluid" id="splash-image" src="{{url_for('send_image', filename='IMG_9871.jpg')}}">
+            <h1 class="text-center" id="splash-intro"><strong>HI, I'M JESSE S NARVASA.</strong></h1>
         </div>
 
-        
+    
         <!-- Intro div -->
-        <div class="container-fluid" style="background-color:#f9f9f9">
-            <h2>Hi, I'm Jesse Narvasa</h2>
+        <div class="container-fluid" style="background-color:#ff5000; height:20em">
+            <div class="row" style="margin:0;">
+                <div class="col-sm">
+                    <p class="text-left">Sample text</p>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
         </div>
 
 
