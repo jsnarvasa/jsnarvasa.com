@@ -24,7 +24,7 @@ body {
 }
 
 #splash-intro {
-    z-index:100;
+    z-index:1;
     position:absolute;
     top:0;
     color:#f9f9f9;

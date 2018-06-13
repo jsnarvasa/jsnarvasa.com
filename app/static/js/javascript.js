@@ -4,7 +4,7 @@ $(document).ready(function() {
     var navbar = $('#main-navbar');
     var container = $('#main-container');
 
-
+    // The order of adding and removing the classes matters here
     function scroll() {
         if ($(window).scrollTop() > 0) {
             container.addClass('navbar-scroll-padding');

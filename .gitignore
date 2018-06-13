@@ -1,5 +1,5 @@
 # Ignore /venv folder
 /venv/
 
-# Ignore images folder
+# Ignore /static/images folder
 /app/static/images/

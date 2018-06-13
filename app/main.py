@@ -4,7 +4,6 @@ from random import randint
 import yaml
 
 
-# the all-important app variable:
 app = Flask(__name__)
 
 
@@ -41,6 +40,11 @@ def gallery():
 @app.route("/send_image/<filename>")
 def send_image(filename):
     return send_from_directory("static/images/", filename)
+
+
+@app.route("/photo/<photo>")
+def photo_view(photo):
+    return render_template("photo.html", photo=photo)
 
 
 # Setting variables to be called in the base template
