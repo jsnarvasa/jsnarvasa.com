@@ -3,3 +3,6 @@
 
 # Ignore /static/images folder
 /app/static/images/
+
+# Ignore __pycache__ folder
+__pycache__/

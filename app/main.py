@@ -1,6 +1,7 @@
 from flask import Flask, render_template, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
+from models import photos
 import yaml
 
 
@@ -17,15 +18,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://" + mysql_user + ":" + mysql_pa
 db = SQLAlchemy(app)
 
 
-class Photos(db.Model):
-    __tablename__ = 'photos'
-    PhotoID = db.Column('PhotoID',db.Integer, primary_key = True)
-    FileName = db.Column('FileName', db.Unicode)
-
-    def __repr__(self):
-        return '<Photos %r>' % self.FileName
-
-
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -33,7 +25,7 @@ def index():
 
 @app.route("/gallery")
 def gallery():
-    image_names = Photos.query.all()
+    image_names = photos.Photos.query.all()
     return render_template("gallery.html", image_names=image_names)
 
 
