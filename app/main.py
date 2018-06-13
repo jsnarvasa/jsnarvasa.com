@@ -15,6 +15,7 @@ mysql_password = db["mysql_password"]
 mysql_host = db["mysql_host"]
 mysql_db = db["mysql_db"]
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://" + mysql_user + ":" + mysql_password + "@" + mysql_host + "/" + mysql_db
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
