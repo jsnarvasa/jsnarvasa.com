@@ -1,7 +1,7 @@
 from flask import Flask, render_template, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
-from models import photos
+from models import model
 import yaml
 
 
@@ -25,7 +25,7 @@ def index():
 
 @app.route("/gallery")
 def gallery():
-    image_names = photos.Photos.query.all()
+    image_names = model.Photos.query.all()
     return render_template("gallery.html", image_names=image_names)
 
 
