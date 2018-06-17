@@ -16,6 +16,7 @@ mysql_host = db["mysql_host"]
 mysql_db = db["mysql_db"]
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://" + mysql_user + ":" + mysql_password + "@" + mysql_host + "/" + mysql_db
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 
 @app.route("/")
@@ -51,5 +52,4 @@ def generate_random_color():
 
 
 if __name__ == "__main__":
-    db.init_app(app)
     app.run(host='0.0.0.0', debug=True, port=80)
