@@ -1,5 +1,6 @@
-from main import db
+from flask_sqlalchemy import SQLAlchemy
 
+db = SQLAlchemy()
 
 class Photos(db.Model):
     __tablename__ = 'photos'
