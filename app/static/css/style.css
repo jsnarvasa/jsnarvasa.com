@@ -15,6 +15,21 @@ body {
     padding:0;
 }
 
+#footer {
+    background-color: #353535;
+    padding-top:1.2em;
+    padding-bottom:1.2em;
+}
+
+#footer-text {
+    color: #B2AFAB;
+    margin-bottom: 0;
+}
+
+#orange {
+    color:#FF6600;
+}
+
 /* Only used index.html */
 #splash-image {
     width:100%;

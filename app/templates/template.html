@@ -9,6 +9,7 @@
         {% block head %}{% endblock %}
     </head>
     <body>
+        <!-- Navigation bar -->
         <nav class="navbar navbar-expand-sm navbar-light" style="background-color:#fff" id="main-navbar">
             <div class="container">
                 <a class="navbar-brand" style="color:{{generated_color}}" href="/"><b>jsnarvasa</b></a>
@@ -44,9 +45,19 @@
         </nav>
 
 
+        <!-- Main content -->
         <div class="container" id="main-container">
             {% block body %}{% endblock %}
         </div>
+
+
+        <!-- Footer -->
+        <div class="container-fluid" id="footer">
+                <div class="container">
+                    <p class="text-center" id="footer-text">&copy; 2018 <a href="http://jsnarvasa.com"><span style="color:{{generated_color}}">Jesse S. Narvasa</span></a> | All Rights Reserved</p>
+                </div>
+        </div>
+
 
         <!-- Javascript libraries-->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
