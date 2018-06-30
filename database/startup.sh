@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Script used to automatically create MySQL Docker container and mount data directory to home directory
 docker run --name=cornandcheesedb \
