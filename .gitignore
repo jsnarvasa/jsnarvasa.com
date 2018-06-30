@@ -1,8 +1,8 @@
 # Ignore /venv folder
-/venv/
+/app/venv/
 
 # Ignore /static/images folder
-/app/static/images/
+/app/app/static/images/
 
 # Ignore __pycache__ folder
 __pycache__/

@@ -1,0 +1,33 @@
+#################################
+Server Setup
+#################################
+
+1 Login as root
+2 Create new user
+3 Assign new user sudo group
+4 Copy SSH key to new user to allow SSH without root
+	rsync --archive --chown=narvjes:narvjes ~/.ssh /home/narvjes
+5 Turn off SSH for root
+	vi sshd_config
+	Set PermitRootLogin no and save
+	Restart ssh service by sudo systemctl reload sshd
+
+
+#1. Initialise database
+
+docker run --name=cornandcheesedb \
+--mount type=bind,src=/home/narvjes/repository/database/data,dst=/var/lib/mysql \
+-d \
+-e MYSQL_ROOT_PASSWORD=password \
+mysql:5.7.22
+
+#2. Create database, MySQL will not accept connections until db is created
+
+docker exec -it cornandcheesedb mysql -uroot -p
+CREATE DATABASE cornandcheese
+USE cornandcheese
+
+#3. Initialise web app
+
+docker build -t cornandcheese .
+docker run --name cornandcheese --link cornandcheesedb:mysql -d -p 80:80 -t cornandcheese
