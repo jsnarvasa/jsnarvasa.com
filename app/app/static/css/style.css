@@ -17,8 +17,8 @@ body {
 
 #footer {
     background-color: #353535;
-    padding-top:1.2em;
-    padding-bottom:1.2em;
+    padding-top:1em;
+    padding-bottom:1em;
 }
 
 #footer-text {
@@ -44,4 +44,25 @@ body {
     top:0;
     color:#f9f9f9;
     width:100%;
+}
+
+/* Only used gallery.html */
+
+#overlay-container{
+    visibility: hidden;
+    background-color:transparent;
+    position: fixed;
+    top:5%;
+    left:5%;
+    right:5%;
+}
+
+#overlay-image{
+    padding-right:0;
+    text-align:center;
+    background-color: #000000;
+}
+
+#overlay-sidebar{
+    background-color:#ffffff;
 }

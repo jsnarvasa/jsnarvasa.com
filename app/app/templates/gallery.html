@@ -8,9 +8,16 @@
     <div class="card-columns">
         {% for image_name in image_names %}
         <div class="card">
-            <img class="img-fluid" src="{{url_for('send_image', filename=image_name['FileName'])}}">
+            <img class="img-fluid gallery-image" src="{{url_for('static', filename='images/'+image_name['FileName'])}}">
         </div>
         {% endfor %}
+    </div>
+
+    <div id="overlay-container">
+        <div class="row">
+            <div class="col-xl-8 container" id="overlay-image"></div>
+            <div class="col-xl-4" id="overlay-sidebar">Some Text</div>
+        </div>
     </div>
 
 {% endblock %}
