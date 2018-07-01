@@ -49,3 +49,8 @@ $('.gallery-image').on('click', function(){
     //var overlayImgHeight = $('#overlay-image').height();
     //$('#overlay-container').css("height",overlayImgHeight);
 });
+
+$('#overlay-close').on('click', function(){
+    $('#overlay-container').css("visibility", "hidden");
+    $('#overlay-image').empty();
+});
