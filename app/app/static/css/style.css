@@ -64,6 +64,11 @@ body {
     background-color: #000000;
 }
 
+#image-on-overlay{
+    max-height:100%;
+    max-width:100%;
+}
+
 #overlay-sidebar{
     background-color:#ffffff;
 }

@@ -31,23 +31,24 @@ $(document).ready(splashIntro);
 $(window).on('resize', splashIntro);
 
 
-// Display image overlay in Gallery
+// Sets the image overlay height in Gallery
 
-function windowHeight() {
-    var height = $(window).height();
-    return height;
-}
+function adjustOverlayHeight() {
+    var windowHeight = $(window).height();
+    var defaultHeight = windowHeight*0.9;
+    $('#overlay-image').css("height", defaultHeight);
+};
 
-$(document).ready(windowHeight);
-$(window).on('resize', windowHeight);
+$('.gallery-image').on('click', adjustOverlayHeight);
+$(window).on('resize',adjustOverlayHeight);
+
+
+// Displays and closes the overlay in Gallery
 
 $('.gallery-image').on('click', function(){
-    var image = '<img class="img-fluid" style="height:100%;max-width:100%" src="' + $(this).attr('src') + '"></img>';
+    var image = '<img class="img-fluid" id="image-on-overlay" src="' + $(this).attr('src') + '"></img>';
     $('#overlay-container').css("visibility", "visible");
     $('#overlay-image').append(image);
-    $('#overlay-image').css("height", windowHeight()*0.9);
-    //var overlayImgHeight = $('#overlay-image').height();
-    //$('#overlay-container').css("height",overlayImgHeight);
 });
 
 $('#overlay-close').on('click', function(){
