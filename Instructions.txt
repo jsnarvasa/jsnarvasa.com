@@ -16,13 +16,25 @@ Server Setup
 	sudo usermod -aG docker ${USER}
 
 
+###############################
+Docker Initialisations
+###############################
+
+Handy for scripts:
+sed -i -e 's/\r$//' scriptname.sh
+
+Things to Note:
+- app docker container name is cornandcheese and the image is tagged as cornandcheese
+- MySQL docker container name is cornandcheesedb
+- connection string in YAML should be to MySQL docker container i.e. cornandcheesedb
+- MySQL docker database name is only cornandcheese
+
 #1. Initialise database
 
 docker run --name=cornandcheesedb \
---mount type=bind,src=/home/narvjes/repository/database/data,dst=/var/lib/mysql \
--d \
+--mount type=bind,src=/home/narvjes/cornandcheese/database/data,dst=/var/lib/mysql \
 -e MYSQL_ROOT_PASSWORD=password \
-mysql:5.7.22
+-d mysql:5.7.22
 
 #2. Create database, MySQL will not accept connections until db is created
 
