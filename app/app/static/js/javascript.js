@@ -33,9 +33,13 @@ $(window).on('resize', splashIntro);
 
 // Sets the image overlay height in Gallery
 
-function adjustOverlayHeight() {
+function getWindowHeight() {
     var windowHeight = $(window).height();
-    var defaultHeight = windowHeight*0.9;
+    return windowHeight;
+};
+
+function adjustOverlayHeight() {
+    var defaultHeight = getWindowHeight()*0.9;
     $('#overlay-image').css("height", defaultHeight);
 };
 
@@ -45,9 +49,15 @@ $(window).on('resize',adjustOverlayHeight);
 
 // Displays and closes the overlay in Gallery
 
+function overlayOffset() {
+    var scrollOffset = $(window).scrollTop();
+    $("#overlay-container").css("top", scrollOffset + getWindowHeight()*0.05);
+};
+
 $('.gallery-image').on('click', function(){
     var image = '<img class="img-fluid" id="image-on-overlay" src="' + $(this).attr('src') + '"></img>';
     $('#overlay-container').css("visibility", "visible");
+    $('#overlay-container').css("top", overlayOffset());
     $('#overlay-image').append(image);
     // AJAX request here
     $.getJSON('/getphotodetails',{
@@ -61,3 +71,5 @@ $('#overlay-close').on('click', function(){
     $('#overlay-container').css("visibility", "hidden");
     $('#overlay-image').empty();
 });
+
+$(window).on('resize', overlayOffset());
