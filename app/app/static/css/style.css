@@ -51,10 +51,11 @@ body {
 #overlay-container{
     visibility: hidden;
     background-color:transparent;
-    position: fixed;
+    position: absolute;
     top:5%;
     left:5%;
     right:5%;
+    z-index: 20;
 }
 
 #overlay-image{
