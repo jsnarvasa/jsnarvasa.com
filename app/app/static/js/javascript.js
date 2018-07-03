@@ -50,9 +50,9 @@ $('.gallery-image').on('click', function(){
     $('#overlay-container').css("visibility", "visible");
     $('#overlay-image').append(image);
     $.getJSON('/getphotodetails',{
-        a: "testing"
+        a: $(this).attr('id')
     }, function(data) {
-        $("#here").text(data.result);
+        $("#here").text(data.imageID);
     });
 });
 

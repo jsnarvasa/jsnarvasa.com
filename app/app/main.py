@@ -32,8 +32,10 @@ def gallery():
 
 @app.route("/getphotodetails")
 def getphotodetails():
-    result = request.args.get('a', 0, type=str)
-    return jsonify(result=result)
+    filename = request.args.get('a', 'Error', type=str)
+    image = model.Photos.query.filter_by(FileName=filename).first()
+    imageID = image.PhotoID
+    return jsonify(imageID=imageID)
 
 
 @app.route("/photo/<photo>")

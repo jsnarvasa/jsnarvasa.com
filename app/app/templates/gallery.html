@@ -8,7 +8,7 @@
     <div class="card-columns">
         {% for image_name in image_names %}
         <div class="card">
-            <img class="img-fluid gallery-image" src="{{url_for('static', filename='images/'+image_name['FileName'])}}">
+            <img class="img-fluid gallery-image" id="{{image_name['FileName']}}" src="{{url_for('static', filename='images/'+image_name['FileName'])}}">
         </div>
         {% endfor %}
     </div>
