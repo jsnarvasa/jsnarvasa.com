@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
 from models import model
@@ -30,9 +30,10 @@ def gallery():
     return render_template("gallery.html", image_names=image_names)
 
 
-@app.route("/send_image/<filename>")
-def send_image(filename):
-    return send_from_directory("static/images/", filename)
+@app.route("/getphotodetails")
+def getphotodetails():
+    result = request.args.get('a', 0, type=str)
+    return jsonify(result=result)
 
 
 @app.route("/photo/<photo>")

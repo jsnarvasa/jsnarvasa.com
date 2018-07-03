@@ -49,6 +49,11 @@ $('.gallery-image').on('click', function(){
     var image = '<img class="img-fluid" id="image-on-overlay" src="' + $(this).attr('src') + '"></img>';
     $('#overlay-container').css("visibility", "visible");
     $('#overlay-image').append(image);
+    $.getJSON('/getphotodetails',{
+        a: "testing"
+    }, function(data) {
+        $("#here").text(data.result);
+    });
 });
 
 $('#overlay-close').on('click', function(){
