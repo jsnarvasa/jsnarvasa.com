@@ -58,6 +58,11 @@ body {
     z-index: 20;
 }
 
+#overlay-close{
+    border:none;
+    color: #f9f9f9;
+}
+
 #overlay-image{
     padding-right:0;
     padding-left:0;
@@ -72,4 +77,5 @@ body {
 
 #overlay-sidebar{
     background-color:#ffffff;
+    padding-right: 0;
 }
