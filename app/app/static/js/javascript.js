@@ -49,6 +49,7 @@ $('.gallery-image').on('click', function(){
     var image = '<img class="img-fluid" id="image-on-overlay" src="' + $(this).attr('src') + '"></img>';
     $('#overlay-container').css("visibility", "visible");
     $('#overlay-image').append(image);
+    // AJAX request here
     $.getJSON('/getphotodetails',{
         a: $(this).attr('id')
     }, function(data) {
