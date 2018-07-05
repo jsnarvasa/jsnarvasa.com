@@ -63,7 +63,10 @@ $('.gallery-image').on('click', function(){
     $.getJSON('/getphotodetails',{
         a: $(this).attr('id')
     }, function(data) {
-        $("#here").text(data.imageID);
+        $("#title").text(data.Title);
+        $("#desc").text(data.Description);
+        $("#uploadDate").text(data.Upload_Date);
+        $("#captureDate").text(data.Capture_Date);
     });
 });
 
