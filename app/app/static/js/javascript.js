@@ -61,7 +61,7 @@ $('.gallery-image').on('click', function(){
     $('#overlay-image').append(image);
     // AJAX request here
     $.getJSON('/getphotodetails',{
-        a: $(this).attr('id')
+        img: $(this).attr('id')
     }, function(data) {
         $("#title").text(data.Title);
         $("#desc").text(data.Description);

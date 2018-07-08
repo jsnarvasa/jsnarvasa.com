@@ -32,7 +32,7 @@ def gallery():
 
 @app.route("/getphotodetails")
 def getphotodetails():
-    filename = request.args.get('a', 'Error', type=str)
+    filename = request.args.get('img', 'Error', type=str)
     image = model.Photos.query.filter_by(FileName=filename).first()
     PhotoID = image.PhotoID
     FileName = image.FileName
