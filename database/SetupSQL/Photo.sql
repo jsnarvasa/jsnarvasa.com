@@ -1,9 +1,10 @@
-CREATE TABLE Photo(
+CREATE TABLE Photos (
     PhotoID INT NOT NULL AUTO_INCREMENT,
-    PhotoFilename VARCHAR(100) NOT NULL,
-    PhotoTitle VARCHAR(100) NOT NULL,
-    PhotoDescription VARCHAR(3000),
-    PhotoUploadDate DATE,
-    PhotoDateTaken DATE,
+    FileName VARCHAR(100) NOT NULL,
+    Caption VARCHAR(5000) NOT NULL,
+    Upload_Date DATE NOT NULL,
+    Capture_Date DATE,
+    City VARCHAR(150),
+    Country VARCHAR(150),
     PRIMARY KEY (PhotoID)
 );
