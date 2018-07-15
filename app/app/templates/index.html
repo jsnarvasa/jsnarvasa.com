@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
         <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
-        <title>Jesse S Narvasa</title>
+        <title>Home | Jesse S Narvasa</title>
     </head>
     <body>
         <!-- The navigation bar -->
@@ -44,12 +44,16 @@
         <!-- Intro div -->
         <div class="container-fluid" style="background-color:#ff5000">
             <div class="row" style="margin:0;">
-                <div class="col-sm">
-                    <p class="text-left" style="color:#f9f9f9">Hi, I’m Jesse and welcome to the place where I convey my story through photography.  As the expression goes “a picture is worth a thousand words” and that every photo tells a story; thus, the idea of creating this photo blog was born with the intention of not having to write words that I normally would in a blog.</p>
-                    <p class="text-left" style="color:#f9f9f9">A little about myself, I work within technology at a financial services firm after graduating with an Information Systems and Operations Management degree at The University of Auckland.</p>
-                    <p class="text-left" style="color:#f9f9f9">Why did I make this site?  Well, I wrote this site for two reasons, the first being my first attempt I made whilst at university just wasn’t cutting it anymore and I wanted the challenge in writing a dynamic site from scratch + the fun that comes with it; the second reason is that I’ve just got a whole lot of photos from my camera which I don’t want to just sit in my computer.</p>
+                <div class="col-lg" id="intro-text">
+                    <h2 class="text-center" style="color:#f9f9f9">Corn and Cheese</h2>
+                    <hr/>
+                    <p class="text-left" style="color:#f9f9f9">If I were to give this photoblog a name, I'll call it just that.</p>
+                    <p class="text-left" style="color:#f9f9f9">It's an analogy; to remind myself that life is too short not to appreciate every second we have: the awkward, the uncertain, the corny and the cheesy moments of life.  And with that appreciation, a mantra to live by; to be the person you've always wanted be and aspire to become.</p>
+                    <p class="text-left" style="color:#f9f9f9">A little about myself.  Now in Sydney, I work within technology at a financial services firm after graduating from my Bachelor of Commerce degree at The University of Auckland.</p>
+                    <p class="text-left" style="color:#f9f9f9">What's this for?  You may ask.  For now, it's the home of my photos accumulated over time since I saved enough money to buy my DSLR back in first year of university.</p>
                 </div>
-                <div class="col-sm">
+                <div class="col-lg" style="padding:0; background-color:#000000; text-align: center;overflow:hidden">
+                    <img class="img-fluid" src="{{url_for('static', filename='images/intro.jpg')}}">
                 </div>
             </div>
         </div>

@@ -46,6 +46,10 @@ body {
     width:100%;
 }
 
+#intro-text {
+    padding:2em;
+}
+
 /* Only used gallery.html */
 
 .gallery-image:hover{
