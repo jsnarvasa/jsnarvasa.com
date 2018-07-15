@@ -42,7 +42,7 @@ $(document).ready(function() {
 
     function adjustOverlayHeight() {
         var defaultHeight = getWindowHeight()*0.9;
-        $('#overlay-image').css("height", defaultHeight);
+        $('#overlay-image').css("max-height", defaultHeight);
     };
 
     $('.gallery-image').on('click', adjustOverlayHeight);
@@ -76,6 +76,11 @@ $(document).ready(function() {
     $('#overlay-close').on('click', function(){
         $('#overlay-container').css("visibility", "hidden");
         $('#overlay-image').empty();
+        $("#caption").empty();
+        $("#city").empty();
+        $("#country").empty();
+        $("#uploadDate").empty();
+        $("#captureDate").empty();
     });
 
     $(window).on('resize', overlayOffset());
