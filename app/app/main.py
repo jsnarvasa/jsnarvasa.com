@@ -34,7 +34,6 @@ def gallery():
 def getphotodetails():
     filename = request.args.get('img', 'Error', type=str)
     image = model.Photos.query.filter_by(FileName=filename).first()
-    db.session.close()  #need to test if works properly
     Caption = image.Caption
     City = image.City
     Country = image.Country
