@@ -58,6 +58,7 @@ $(document).ready(function() {
 
     $('.gallery-image').on('click', function(){
         var image = '<img class="img-fluid" id="image-on-overlay" src="' + $(this).attr('src') + '"></img>';
+        $('.overlay-background').css("visibility", "visible").hide().fadeIn(150);
         $('#overlay-container').css("visibility", "visible").hide().fadeIn(150);
         $('#overlay-container').css("top", overlayOffset());
         $('#overlay-image').append(image);
@@ -73,16 +74,20 @@ $(document).ready(function() {
         });
     });
 
-    $('#overlay-close').on('click', function(){
+    function closeOverlay() {
         $('#overlay-container').css("visibility", "hidden");
+        $('.overlay-background').css("visibility", "hidden");
         $('#overlay-image').empty();
         $("#caption").empty();
         $("#city").empty();
         $("#country").empty();
         $("#uploadDate").empty();
         $("#captureDate").empty();
-    });
+    };
 
+    $('#overlay-close').on('click',closeOverlay);
+    $('.overlay-background').on('click',closeOverlay);
+    
     $(window).on('resize', overlayOffset());
     
 });
