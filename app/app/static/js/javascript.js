@@ -58,7 +58,7 @@ $(document).ready(function() {
 
     $('.gallery-image').on('click', function(){
         var image = '<img class="img-fluid" id="image-on-overlay" src="' + $(this).attr('src') + '"></img>';
-        $('#overlay-container').css("visibility", "visible");
+        $('#overlay-container').css("visibility", "visible").hide().fadeIn(150);
         $('#overlay-container').css("top", overlayOffset());
         $('#overlay-image').append(image);
         // AJAX request here

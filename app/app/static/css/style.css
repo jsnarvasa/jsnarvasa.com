@@ -48,6 +48,11 @@ body {
 
 /* Only used gallery.html */
 
+.gallery-image:hover{
+    opacity:0.9;
+    cursor: pointer;
+}
+
 #overlay-container{
     visibility: hidden;
     background-color:transparent;
