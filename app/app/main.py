@@ -54,7 +54,7 @@ def generate_random_color():
     r = lambda: randint(0,50)
     g = lambda: randint(100,180)
     b = lambda: randint(180,220)
-    color = '#%02X%02X%02X' % (r(),g(),b())
+    color = '#%02X%02X%02X' % (r(),g(),b()) #string formatting used where 02 represents 2 values and padded by 0, X to return hex
     return dict(generated_color=color)
 
 
