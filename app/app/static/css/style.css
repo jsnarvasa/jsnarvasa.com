@@ -31,10 +31,17 @@ body {
 }
 
 /* Only used index.html */
+#splash-image-div{
+    min-height:60vh;
+    max-height:100vh;
+    overflow:hidden;
+    background-color: #000000;
+}
+
 #splash-image {
     width:100%;
 	height:auto;
-    max-width:3456px;
+    max-width:1920px;
     opacity:0.27;
 }
 
