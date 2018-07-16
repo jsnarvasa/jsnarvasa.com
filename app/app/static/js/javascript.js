@@ -27,6 +27,7 @@ $(document).ready(function() {
     function splashIntro() {
         var splashImgHeight = $('#splash-image-div').height();
         $('#splash-intro').css('margin-top',splashImgHeight/2.2);
+        $('#splash-intro').css('visibility', 'visible');
     };
 
     $(document).ready(splashIntro);
