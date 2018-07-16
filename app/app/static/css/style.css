@@ -54,8 +54,12 @@ body {
     visibility:hidden;
 }
 
-#intro-text {
+div#intro-text {
     padding:2em;
+}
+
+h2, p#intro-text {
+    color:#f9f9f9;
 }
 
 /* Only used gallery.html */
