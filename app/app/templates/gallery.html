@@ -5,7 +5,7 @@
 
 {% block body%}
 
-    <div class="card-columns">
+    <div class="card-columns" style="margin-top:1em;">
         {% for image_name in image_names %}
         <div class="card">
             <img class="img-fluid gallery-image" id="{{image_name['FileName']}}" src="{{url_for('static', filename='photos/'+image_name['FileName'])}}">
