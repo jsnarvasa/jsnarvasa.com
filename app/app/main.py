@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
+from datetime import datetime
 from models import model
 import yaml
 
@@ -38,9 +39,9 @@ def getphotodetails():
     Caption = image.Caption
     City = image.City
     Country = image.Country
-    Upload_Date = image.Upload_Date
-    Capture_Date = image.Capture_Date
-    return jsonify(Caption=Caption, City=City, Country=Country,Upload_Date=Upload_Date, Capture_Date=Capture_Date)
+    Upload_Date = image.Upload_Date.strftime("%A, %d %B %Y")
+    Capture_Date = image.Capture_Date.strftime("%A, %d %B %Y")
+    return jsonify(Caption=Caption, City=City, Country=Country,Upload_Date=str(Upload_Date), Capture_Date=str(Capture_Date))
 
 
 @app.route("/photo/<photo>")

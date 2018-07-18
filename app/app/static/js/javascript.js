@@ -68,8 +68,7 @@ $(document).ready(function() {
             img: $(this).attr('id')
         }, function(data) {
             $("#caption").text(data.Caption);
-            $("#city").text(data.City);
-            $("#country").text(data.Country);
+            $("#location").text(data.City + ", " + data.Country);
             $("#uploadDate").text(data.Upload_Date);
             $("#captureDate").text(data.Capture_Date);
         });
@@ -80,8 +79,7 @@ $(document).ready(function() {
         $('.overlay-background').css("visibility", "hidden");
         $('#overlay-image').empty();
         $("#caption").empty();
-        $("#city").empty();
-        $("#country").empty();
+        $("#location").empty();
         $("#uploadDate").empty();
         $("#captureDate").empty();
     };
