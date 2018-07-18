@@ -16,6 +16,7 @@ mysql_host = db["mysql_host"]
 mysql_db = db["mysql_db"]
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://" + mysql_user + ":" + mysql_password + "@" + mysql_host + "/" + mysql_db
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 7200
 db = SQLAlchemy(app)
 
 
@@ -27,7 +28,6 @@ def index():
 @app.route("/gallery")
 def gallery():
     image_names = model.Photos.query.all()
-    db.session.remove() #needs full testing
     return render_template("gallery.html", image_names=image_names)
 
 
@@ -35,7 +35,6 @@ def gallery():
 def getphotodetails():
     filename = request.args.get('img', 'Error', type=str)
     image = model.Photos.query.filter_by(FileName=filename).first()
-    db.session.remove() #needs full testing
     Caption = image.Caption
     City = image.City
     Country = image.Country
