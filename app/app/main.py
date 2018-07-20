@@ -15,10 +15,10 @@ mysql_user = db["mysql_user"]
 mysql_password = db["mysql_password"]
 mysql_host = db["mysql_host"]
 mysql_db = db["mysql_db"]
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://" + mysql_user + ":" + mysql_password + "@" + mysql_host + "/" + mysql_db
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqldb://" + mysql_user + ":" + mysql_password + "@" + mysql_host + "/" + mysql_db + "?charset=utf8mb4"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_POOL_RECYCLE'] = 7200
-db = SQLAlchemy(app)
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
+model.db.init_app(app)
 
 
 @app.route("/")
