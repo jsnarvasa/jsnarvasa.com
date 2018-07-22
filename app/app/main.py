@@ -28,7 +28,7 @@ def index():
 
 @app.route("/gallery")
 def gallery():
-    image_names = model.Photos.query.order_by(model.Photos.PhotoID.asc()).limit(10)
+    image_names = model.Photos.query.order_by(model.Photos.PhotoID.asc()).limit(30)
     return render_template("gallery.html", image_names=image_names)
 
 
