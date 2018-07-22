@@ -3,6 +3,10 @@ body {
     background-color: #f9f9f9;
 }
 
+.navbar {
+    z-index: 18;
+}
+
 .navbar-scroll-padding {
     padding-top:55px;
 }
