@@ -58,7 +58,7 @@ $(document).ready(function() {
     };
 
     $('.gallery-image').on('click', function(){
-        var image = '<img class="img-fluid" id="image-on-overlay" src="' + $(this).attr('src') + '"></img>';
+        var image = '<img class="img-fluid" id="image-on-overlay" src="static/photos/' + $(this).attr('id') + '"></img>';
         $('.overlay-background').css("visibility", "visible").hide().fadeIn(150);
         $('#overlay-container').css("visibility", "visible").hide().fadeIn(150);
         $('#overlay-container').css("top", overlayOffset());
