@@ -4,6 +4,7 @@ CREATE TABLE Photos (
     Caption VARCHAR(5000) NOT NULL,
     Upload_Date DATE NOT NULL,
     Capture_Date DATE,
+    Place VARCHAR(150),
     City VARCHAR(150),
     Country VARCHAR(150),
     PRIMARY KEY (PhotoID)

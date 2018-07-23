@@ -9,6 +9,7 @@ class Photos(db.Model):
     Caption = db.Column('Caption', db.String(5000))
     Upload_Date = db.Column('Upload_Date', db.Date)
     Capture_Date = db.Column('Capture_Date', db.Date)
+    Place = db.Column('Place', db.String(150))
     City = db.Column('City', db.String(150))
     Country = db.Column('Country', db.String(150))
 

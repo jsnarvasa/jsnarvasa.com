@@ -28,7 +28,8 @@ def index():
 
 @app.route("/gallery")
 def gallery():
-    image_names = model.Photos.query.order_by(model.Photos.Capture_Date.desc()).limit(30) #set to 9 after pagination implemented
+    image_names = model.Photos.query.order_by(model.Photos.Capture_Date.desc()).paginate(page=1, per_page=9, error_out=False)
+    image_names = image_names.items
     return render_template("gallery.html", image_names=image_names)
 
 
@@ -37,11 +38,12 @@ def getphotodetails():
     filename = request.args.get('img', 'Error', type=str)
     image = model.Photos.query.filter_by(FileName=filename).first()
     Caption = image.Caption
+    Place = image.Place
     City = image.City
     Country = image.Country
     Upload_Date = image.Upload_Date.strftime("%A, %d %B %Y")
     Capture_Date = image.Capture_Date.strftime("%A, %d %B %Y")
-    return jsonify(Caption=Caption, City=City, Country=Country,Upload_Date=str(Upload_Date), Capture_Date=str(Capture_Date))
+    return jsonify(Caption=Caption, Place=Place, City=City, Country=Country,Upload_Date=str(Upload_Date), Capture_Date=str(Capture_Date))
 
 
 @app.route("/photo/<photo>")

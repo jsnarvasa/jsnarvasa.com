@@ -71,6 +71,7 @@ $(document).ready(function() {
             $("#location").text(data.City + ", " + data.Country);
             $("#uploadDate").text(data.Upload_Date);
             $("#captureDate").text(data.Capture_Date);
+            $("#place").html("&mdash; " + data.Place);
         });
     });
 
@@ -82,11 +83,12 @@ $(document).ready(function() {
         $("#location").empty();
         $("#uploadDate").empty();
         $("#captureDate").empty();
+        $("#place").empty();
     };
 
     $('#overlay-close').on('click',closeOverlay);
     $('.overlay-background').on('click',closeOverlay);
     
     $(window).on('resize', overlayOffset());
-    
+
 });
