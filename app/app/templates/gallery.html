@@ -31,3 +31,8 @@
     </div>
 
 {% endblock %}
+
+{% block jslibrary %}
+    <!-- Special javascript for gallery.html -->
+    <script src="{{ url_for('static',filename='js/gallery.js') }}"></script>
+{% endblock %}

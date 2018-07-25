@@ -33,6 +33,17 @@ def gallery():
     return render_template("gallery.html", image_names=image_names)
 
 
+@app.route("/gallery/<pageNum>")
+def gallery_pageNum(pageNum):
+    pageNum = int(pageNum)
+    image_names = model.Photos.query.order_by(model.Photos.Capture_Date.desc()).paginate(page=pageNum, per_page=9, error_out=False)
+    image_names = image_names.items
+    image_list = []
+    for image in image_names:
+        image_list.append(image.FileName)
+    return jsonify(image_names=image_list)
+
+
 @app.route("/getphotodetails")
 def getphotodetails():
     filename = request.args.get('img', 'Error', type=str)

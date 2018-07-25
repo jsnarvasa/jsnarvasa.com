@@ -12,6 +12,4 @@ class Photos(db.Model):
     Place = db.Column('Place', db.String(150))
     City = db.Column('City', db.String(150))
     Country = db.Column('Country', db.String(150))
-
-    def __repr__(self):
-        return '<Photos %r>' % self.FileName
+    
