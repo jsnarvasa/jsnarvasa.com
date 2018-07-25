@@ -18,7 +18,7 @@ $(document).ready(function() {
     };
     
     function bindScroll(){
-        if(!recentScroll && $(window).scrollTop() + $(window).height() > $(document).height()*0.9){
+        if(!recentScroll && $(window).scrollTop() + $(window).height() > $(document).height()-20){
             $(window).off('scroll');
             pageCount++;
             loadMore(pageCount);
