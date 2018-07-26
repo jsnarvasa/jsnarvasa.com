@@ -81,7 +81,7 @@ $(document).ready(function() {
     };
     
     function bindScroll(){
-        if(!recentScroll && $(window).scrollTop() + $(window).height() >= $(document).height()-20){
+        if(!recentScroll && $(window).scrollTop() >= $(document).height() - $(window).height() - 10){
             $(window).off('scroll');
             pageCount++;
             loadMore(pageCount);
