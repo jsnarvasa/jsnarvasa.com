@@ -59,6 +59,7 @@ def getphotodetails():
 
 @app.route("/photo/<photo>")
 def photo_view(photo):
+    photo = str(photo)
     return render_template("photo.html", photo=photo)
 
 
