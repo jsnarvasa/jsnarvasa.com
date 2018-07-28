@@ -76,11 +76,13 @@ $(document).ready(function() {
         page = 'search'
     };
 
+    searchQuery = $('#searchQuery').text()
+
     // Checks if there are more photos in the next pagination batch.  If next page contains 0 images, then hide load more button
     function isMoreContent(pageNum){
         pageCount++;
         nextImageCount = 1;
-        $.getJSON(url='/' + page + '/'+ pageCount, success=function(images){
+        $.getJSON(url='/' + page + '/'+ pageCount, data='q=' + searchQuery, success=function(images){
             nextImageCount = images.image_names.length;
         }).then(function(){
             if(nextImageCount == 0){
@@ -94,7 +96,7 @@ $(document).ready(function() {
     function loadMore(pageNum){
         pageCount++;
         //AJAX request
-        $.getJSON(url='/' + page + '/'+ pageCount, success=function(images){
+        $.getJSON(url='/' + page + '/'+ pageCount, data='q=' + searchQuery, success=function(images){
             images = images.image_names;
             images.forEach(FileName => {
                 $('.card-columns').append('<div class="card"><img class="img-fluid gallery-image" id="' + FileName + '" src="static/photos/thumbnail/' + FileName + '"></div>');
@@ -122,4 +124,11 @@ $(document).ready(function() {
         $(document).on('scroll',bindScroll);
     });
 
+    // Page header text
+    if(page=='gallery'){
+        $('h1.pageHeader').text('Gallery');
+    }
+    else{
+        $('h1.pageHeader').text('Search Results for ' + searchQuery);
+    };
 });

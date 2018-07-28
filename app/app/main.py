@@ -62,13 +62,13 @@ def search():
     searchQuery = request.args.get('q', '')
     image_names = model.Photos.query.filter((model.Photos.Country.like('%' + searchQuery + '%')) | (model.Photos.City.like('%' + searchQuery + '%')) | (model.Photos.Place.like('%' + searchQuery + '%'))).order_by(model.Photos.Capture_Date.desc()).paginate(page=1, per_page=9, error_out=False)
     image_names = image_names.items
-    return render_template('gallery.html', image_names=image_names)
+    return render_template('gallery.html', image_names=image_names, searchQuery=searchQuery)
 
 
-@app.route("/search/<pageNum>")
+@app.route("/search/<pageNum>", methods=["GET"])
 def search_pageNum(pageNum):
     pageNum = int(pageNum)
-    searchQuery = request.args.get('q', '')
+    searchQuery = request.args.get('q','')
     image_names = model.Photos.query.filter((model.Photos.Country.like('%' + searchQuery + '%')) | (model.Photos.City.like('%' + searchQuery + '%')) | (model.Photos.Place.like('%' + searchQuery + '%'))).order_by(model.Photos.Capture_Date.desc()).paginate(page=pageNum, per_page=9, error_out=False)
     image_names = image_names.items
     image_list = []
