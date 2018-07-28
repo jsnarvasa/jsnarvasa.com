@@ -116,3 +116,13 @@ h2, p#intro-text {
     background-color:#ffffff;
     padding-right: 0;
 }
+
+#loadMoreButton{
+    width:100%;
+    background-color:transparent;
+    margin-bottom:1em;
+}
+
+#loadMoreButton:hover{
+    background-color:transparent;
+}

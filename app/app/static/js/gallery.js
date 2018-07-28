@@ -67,7 +67,23 @@ $(document).ready(function() {
     pageCount = 1
     var recentScroll = false;
 
+    // Checks if there are more photos in the next pagination batch.  If next page contains 0 images, then hide load more button
+    function isMoreContent(pageNum){
+        pageCount++;
+        nextImageCount = 1;
+        $.getJSON(url='/gallery/'+ pageCount, success=function(images){
+            nextImageCount = images.image_names.length;
+        }).then(function(){
+            if(nextImageCount == 0){
+                $('#loadMoreButton').css('visibility', 'hidden');
+            };
+        });
+        pageCount--;
+    };
+
+    // The one that does the loading and append of new batch of images
     function loadMore(pageNum){
+        pageCount++;
         //AJAX request
         $.getJSON(url='/gallery/'+ pageCount, success=function(images){
             images = images.image_names;
@@ -75,22 +91,26 @@ $(document).ready(function() {
                 $('.card-columns').append('<div class="card"><img class="img-fluid gallery-image" id="' + FileName + '" src="static/photos/thumbnail/' + FileName + '"></div>');
             });
         });
+        isMoreContent(pageCount);
         $(window).on("load", function(){
             $(document).on('scroll', bindScroll);
         });
     };
     
+    // Event handler for infinity scrolling, makes sure it's not triggered more than once
     function bindScroll(){
         if(!recentScroll && $(window).scrollTop() >= $(document).height() - $(window).height() - 10){
             $(window).off('scroll');
-            pageCount++;
-            loadMore(pageCount);
             recentScroll = true;
             window.setTimeout(() => { recentScroll = false; }, 2000);
+            loadMore(pageCount);
         };
     };
 
+    // The two event handlers to activate next page request
+    $('#loadMoreButton').on('click', loadMore);
     $(window).on("load", function() {
         $(document).on('scroll',bindScroll);
     });
+
 });
