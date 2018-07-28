@@ -34,6 +34,10 @@ body {
     color:#FF6600;
 }
 
+.pageHeader{
+    margin: 1em 0 1em 0;
+}
+
 /* Only used index.html */
 #splash-image-div{
     min-height:60vh;

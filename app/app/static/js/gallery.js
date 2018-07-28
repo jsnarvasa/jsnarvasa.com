@@ -67,11 +67,20 @@ $(document).ready(function() {
     pageCount = 1
     var recentScroll = false;
 
+    var url = window.location.href; //because it can be from gallery or search
+    var page = '';
+    if(url.substr(url.length-7)=='gallery'){
+        page = 'gallery';
+    }
+    else{
+        page = 'search'
+    };
+
     // Checks if there are more photos in the next pagination batch.  If next page contains 0 images, then hide load more button
     function isMoreContent(pageNum){
         pageCount++;
         nextImageCount = 1;
-        $.getJSON(url='/gallery/'+ pageCount, success=function(images){
+        $.getJSON(url='/' + page + '/'+ pageCount, success=function(images){
             nextImageCount = images.image_names.length;
         }).then(function(){
             if(nextImageCount == 0){
@@ -85,7 +94,7 @@ $(document).ready(function() {
     function loadMore(pageNum){
         pageCount++;
         //AJAX request
-        $.getJSON(url='/gallery/'+ pageCount, success=function(images){
+        $.getJSON(url='/' + page + '/'+ pageCount, success=function(images){
             images = images.image_names;
             images.forEach(FileName => {
                 $('.card-columns').append('<div class="card"><img class="img-fluid gallery-image" id="' + FileName + '" src="static/photos/thumbnail/' + FileName + '"></div>');

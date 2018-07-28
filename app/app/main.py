@@ -57,10 +57,23 @@ def getphotodetails():
     return jsonify(Caption=Caption, Place=Place, City=City, Country=Country,Upload_Date=str(Upload_Date), Capture_Date=str(Capture_Date))
 
 
-@app.route("/photo/<photo>")
-def photo_view(photo):
-    photo = str(photo)
-    return render_template("photo.html", photo=photo)
+@app.route("/search", methods=["GET"])
+def search():
+    searchQuery = request.args.get('q', '')
+    image_names = model.Photos.query.filter_by(Country=searchQuery).order_by(model.Photos.Capture_Date.desc()).paginate(page=1, per_page=9, error_out=False)
+    image_names = image_names.items
+    return render_template('gallery.html', image_names=image_names)
+
+
+@app.route("/search/<pageNum>")
+def search_pageNum(pageNum):
+    pageNum = int(pageNum)
+    image_names = model.Photos.query.filter_by(Country=searchQuery).order_by(model.Photos.Capture_Date.desc()).paginate(page=pageNum, per_page=9, error_out=False)
+    image_names = image_names.items
+    image_list = []
+    for image in image_names:
+        image_list.append(image.FileName)
+    return jsonify(image_names=image_list)
 
 
 @app.errorhandler(403)
