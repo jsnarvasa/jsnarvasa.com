@@ -18,3 +18,8 @@ INSERT INTO Photos VALUES (17,'raccoon-dog-kachi-kachi-ropeway.jpg','Do not fall
 INSERT INTO Photos VALUES (18,'shin-okubo-station.jpg','Really interesting and vibrant neighbourhood.  Stayed here for three nights and never realised it was Korea town the whole time',NOW(), '2018-02-16', 'Shin Okubo','Tokyo Prefecture','Japan');
 INSERT INTO Photos VALUES (19,'sydney-fireworks-2018.jpg','Lined up for a spot since 9am in the morning and this is the best our spot could muster; still a good experience nonetheless',NOW(), '2018-01-01', 'Mrs Macquarie''s Chair, Sydney','NSW','Australia');
 INSERT INTO Photos VALUES (20,'west-head-lookout.jpg','Finest piece of water indeed',NOW(), '2018-01-26', 'West Head Lookout','NSW','Australia');
+INSERT INTO Photos VALUES (21,'manly-beach-stopover.jpg','Stopover for brunch on the way to Ku-ring-gai Chase National Park',NOW(), '2018-01-26', 'Manly Beach','NSW','Australia');
+INSERT INTO Photos VALUES (22,'red-hands-cave-sign.jpg','We never really found Red Hands Cave',NOW(), '2018-01-26', 'Red Hands Track','NSW','Australia');
+INSERT INTO Photos VALUES (23,'pagoda-nan-tien-temple.jpg','First stop - Pagoda!',NOW(), '2018-01-14', 'Nan Tien Temple','NSW','Australia');
+INSERT INTO Photos VALUES (24,'lotus-pond-summer-nan-tien.jpg','Lotus pond in summertime',NOW(), '2018-01-14', 'Nan Tien Temple','NSW','Australia');
+INSERT INTO Photos VALUES (25,'gratitude-bell-nan-tien.jpg','Ending the trip with a gong...  A trip definitely worth taking, swapping the urban chaos of Sydney for serenity, encapsulated by this hilltop view from Gratitude Bell',NOW(), '2018-01-14', 'Nan Tien Temple','NSW','Australia');
