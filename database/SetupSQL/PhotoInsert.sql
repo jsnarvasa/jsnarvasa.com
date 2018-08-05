@@ -23,3 +23,6 @@ INSERT INTO Photos VALUES (22,'red-hands-cave-sign.jpg','We never really found R
 INSERT INTO Photos VALUES (23,'pagoda-nan-tien-temple.jpg','First stop - Pagoda!',NOW(), '2018-01-14', 'Nan Tien Temple','NSW','Australia');
 INSERT INTO Photos VALUES (24,'lotus-pond-summer-nan-tien.jpg','Lotus pond in summertime',NOW(), '2018-01-14', 'Nan Tien Temple','NSW','Australia');
 INSERT INTO Photos VALUES (25,'gratitude-bell-nan-tien.jpg','Ending the trip with a gong...  A trip definitely worth taking, swapping the urban chaos of Sydney for serenity, encapsulated by this hilltop view from Gratitude Bell',NOW(), '2018-01-14', 'Nan Tien Temple','NSW','Australia');
+INSERT INTO Photos VALUES (26,'bondi-beach-flag.jpg','Finally managed to go to Bondi',NOW(), '2017-10-28', 'Bondi Beach','NSW','Australia');
+INSERT INTO Photos VALUES (27,'sydney-opera-house-night.jpg','Compulsory Opera House shot for a Sydneysider',NOW(), '2017-04-15', 'Sydney Opera House','NSW','Australia');
+INSERT INTO Photos VALUES (28,'sydney-ferry-circular-quay.jpg','First week settling into Sydney and taking photos like a tourist',NOW(), '2017-01-28', 'Circular Quay','NSW','Australia');
