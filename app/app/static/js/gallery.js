@@ -67,10 +67,10 @@ $(document).ready(function() {
     pageCount = 1
     var recentScroll = false;
 
-    var url = window.location.href; //because it can be from gallery or search
+    var url = window.location.href; //because it can be from photoblog or search
     var page = '';
-    if(url.substr(url.length-7)=='gallery'){
-        page = 'gallery';
+    if(url.substr(url.length-9)=='photoblog'){
+        page = 'photoblog';
     }
     else{
         page = 'search'
@@ -125,8 +125,8 @@ $(document).ready(function() {
     });
 
     // Page header text
-    if(page=='gallery'){
-        $('h1.pageHeader').text('Gallery');
+    if(page=='photoblog'){
+        $('h1.pageHeader').text('Photoblog');
         $('p.pageHeader').text("The section where I place the stream of photos I've gathered over the past (and coming) years.  Formely collecting dust in my hard drive, I used to wonder what to do with them.");
     }
     else{
