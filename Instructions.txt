@@ -44,5 +44,7 @@ USE cornandcheese
 
 #3. Initialise web app
 
+git pull origin master
+update database_config.yaml mysql_host value to 'cornandcheesedb'
 docker build -t cornandcheese .
 docker run --name cornandcheese --link cornandcheesedb:mysql -d -p 80:80 -t cornandcheese
