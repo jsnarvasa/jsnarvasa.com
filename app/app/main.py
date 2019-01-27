@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
 from datetime import datetime
@@ -75,6 +75,11 @@ def search_pageNum(pageNum):
     for image in image_names:
         image_list.append(image.FileName)
     return jsonify(image_names=image_list)
+
+
+@app.route('/sitemap')
+def sitemap():
+    return redirect(url_for('static', filename='sitemap.xml'))
 
 
 @app.errorhandler(403)
