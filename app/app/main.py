@@ -79,7 +79,7 @@ def search_pageNum(pageNum):
 
 @app.route('/sitemap')
 def sitemap():
-    return redirect(url_for('static',filename='sitemap.xml')
+    return redirect(url_for('static',filename='sitemap.xml'))
 
 
 @app.errorhandler(403)
