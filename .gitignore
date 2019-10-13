@@ -2,7 +2,7 @@
 /app/venv/
 
 # Ignore /static/photos folder
-/app/app/static/photos/
+/app/static/photos/
 
 # Ignore __pycache__ folder
 __pycache__/

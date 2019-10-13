@@ -1,9 +1,8 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from app import db
 
 class Photos(db.Model):
     __tablename__ = 'Photos'
+
     PhotoID = db.Column('PhotoID',db.Integer, primary_key = True)
     FileName = db.Column('FileName', db.String(100))
     Caption = db.Column('Caption', db.String(5000))
@@ -12,4 +11,3 @@ class Photos(db.Model):
     Place = db.Column('Place', db.String(150))
     City = db.Column('City', db.String(150))
     Country = db.Column('Country', db.String(150))
-    
