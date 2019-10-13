@@ -9,7 +9,7 @@ from config import database_conn
 # Initialise Flask and SQLAlchemy classes
 ######################################################
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + database_conn['user'] + ':' + database_conn['password'] + '@' + database_conn['host'] + '/' + database_conn['schema']
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + database_conn['user'] + ':' + database_conn['password'] + '@' + database_conn['host'] + '/' + database_conn['schema'] + '?charset=utf8mb4'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
 db = SQLAlchemy(app)
