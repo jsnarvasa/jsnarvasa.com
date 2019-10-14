@@ -13,8 +13,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + database_conn['user
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
 db = SQLAlchemy(app)
-
 from models.Photos import Photos
+
 
 ######################################################
 # Routes

@@ -4,5 +4,5 @@
 # Ignore /static/photos folder
 /app/static/photos/
 
-# Ignore __pycache__ folder
+# Ignore __pycache__ folders
 __pycache__/
