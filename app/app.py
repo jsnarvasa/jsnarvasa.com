@@ -2,17 +2,26 @@ from flask import Flask, render_template, redirect, url_for, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
 from datetime import datetime
-from config import database_conn
+import socket
+import config
 
+
+# Determining environment
+hostname = socket.gethostname()
 
 ######################################################
 # Initialise Flask and SQLAlchemy classes
 ######################################################
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + database_conn['user'] + ':' + database_conn['password'] + '@' + database_conn['host'] + '/' + database_conn['schema'] + '?charset=utf8mb4'
+if hostname == config.hostname['PROD']:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + config.database_conn['PROD']['user'] + ':' + config.database_conn['PROD']['password'] + '@' + config.database_conn['PROD']['host'] + '/' + config.database_conn['PROD']['schema'] + '?charset=utf8mb4'
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + config.database_conn['DEV']['user'] + ':' + config.database_conn['DEV']['password'] + '@' + config.database_conn['DEV']['host'] + '/' + config.database_conn['DEV']['schema'] + '?charset=utf8mb4'
+    app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
 db = SQLAlchemy(app)
+
 from models.Photos import Photos
 
 
