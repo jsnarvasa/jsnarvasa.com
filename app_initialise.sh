@@ -1,1 +1,0 @@
-docker run --name cornandcheese --link cornandcheesedb:mysql -d -p 80:80 -t cornandcheese
