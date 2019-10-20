@@ -5,8 +5,8 @@ hostname = {
 
 database_conn = {
     'PROD': {
-        'user': 'root',
-        'password': 'reZ9pTFAOyU8PVpQ@6UY4*k^jshcPojFHacV8x@aHKEORN@$G1',
+        'user': 'jsnarvasa',
+        'password': 'owX$y1%Jh5d1DW%vax',
         'host': 'localhost',
         'schema': 'CornAndCheese'
     },
