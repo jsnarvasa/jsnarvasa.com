@@ -5,16 +5,16 @@ Date: 14 October 2019
 
 #### Server Setup
 ***
-1 Login as root
-2 Create new user
-3 Assign new user sudo group
-4 Copy SSH key to new user to allow SSH without root
+1. Login as root
+2. Create new user
+3. Assign new user sudo group
+4. Copy SSH key to new user to allow SSH without root
 	rsync --archive --chown=narvjes:narvjes ~/.ssh /home/narvjes
-5 Turn off SSH for root
+5. Turn off SSH for root
 	vi sshd_config
 	Set PermitRootLogin no and save
 	Restart ssh service by sudo systemctl reload sshd
-6 Add user to docker group
+6. Add user to docker group
 	sudo usermod -aG docker ${USER}
 
 
