@@ -11,3 +11,15 @@ class Photos(db.Model):
     Place = db.Column('Place', db.String(150))
     City = db.Column('City', db.String(150))
     Country = db.Column('Country', db.String(150))
+
+
+    @classmethod
+    def get_photo_list(cls, currentPage=1, perPage=9):
+        currentPage = int(currentPage)
+        return cls.query.order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
+
+    @classmethod
+    def search_photo_list(cls, searchQuery, currentPage=1, perPage=9):
+        currentPage = int(currentPage)
+        return cls.query.filter((Photos.Country.like('%' + searchQuery + '%')) | (Photos.City.like('%' + searchQuery + '%')) | (Photos.Place.like('%' + searchQuery + '%'))).order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
+        

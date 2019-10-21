@@ -45,3 +45,11 @@ git pull origin master
 update database_config.yaml mysql_host value to 'cornandcheesedb'
 docker build -t cornandcheese .
 docker run --name cornandcheese --link cornandcheesedb:mysql -d -p 80:80 -t cornandcheese
+
+##### Redo
+1. Create virtualenv
+2. Copy .service file to /etc/systemd/system/ - this allows you to do systemctl calls
+3. Create nginx entry in sites-available directory - this creates the nginx entry for nginx to link to uwsgi
+4. Create link file of nginx entry in sites-enabled directory
+5. Run "sudo systemctl start jsnarvasa.service"
+6. May need to restart nginx "sudo systemctl restart nginx" or just reload

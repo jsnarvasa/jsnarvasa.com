@@ -35,16 +35,13 @@ def index():
 
 @app.route("/photoblog")
 def photoblog():
-    image_names = Photos.query.order_by(Photos.Capture_Date.desc()).paginate(page=1, per_page=9, error_out=False)
-    image_names = image_names.items
+    image_names = Photos.get_photo_list()
     return render_template("gallery.html", image_names=image_names)
 
 
 @app.route("/photoblog/<pageNum>")
 def photoblog_pageNum(pageNum):
-    pageNum = int(pageNum)
-    image_names = Photos.query.order_by(Photos.Capture_Date.desc()).paginate(page=pageNum, per_page=9, error_out=False)
-    image_names = image_names.items
+    image_names = Photos.get_photo_list(pageNum)
     image_list = []
     for image in image_names:
         image_list.append(image.FileName)
@@ -67,17 +64,14 @@ def getphotodetails():
 @app.route("/search", methods=["GET"])
 def search():
     searchQuery = request.args.get('q', '')
-    image_names = Photos.query.filter((Photos.Country.like('%' + searchQuery + '%')) | (Photos.City.like('%' + searchQuery + '%')) | (Photos.Place.like('%' + searchQuery + '%'))).order_by(Photos.Capture_Date.desc()).paginate(page=1, per_page=9, error_out=False)
-    image_names = image_names.items
+    image_names = Photos.search_photo_list(searchQuery)
     return render_template('gallery.html', image_names=image_names, searchQuery=searchQuery)
 
 
 @app.route("/search/<pageNum>", methods=["GET"])
 def search_pageNum(pageNum):
-    pageNum = int(pageNum)
     searchQuery = request.args.get('q','')
-    image_names = Photos.query.filter((Photos.Country.like('%' + searchQuery + '%')) | (Photos.City.like('%' + searchQuery + '%')) | (Photos.Place.like('%' + searchQuery + '%'))).order_by(Photos.Capture_Date.desc()).paginate(page=pageNum, per_page=9, error_out=False)
-    image_names = image_names.items
+    image_names = Photos.search_photo_list(searchQuery, pageNum, 9)
     image_list = []
     for image in image_names:
         image_list.append(image.FileName)
@@ -91,17 +85,17 @@ def sitemap():
 
 @app.errorhandler(403)
 def forbidden(e):
-    return render_template('403.html'), 403
+    return render_template('error/403.html'), 403
 
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('error/404.html'), 404
 
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    return render_template('500.html'), 500
+    return render_template('error/500.html'), 500
 
 
 # Setting variables to be called in the base template

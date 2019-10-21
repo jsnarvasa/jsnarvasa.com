@@ -9,4 +9,4 @@ if __name__ == "__main__":
     if hostname == config.hostname['PROD']:
         app.run(port=6000)
     else:
-        app.run(host='localhost', port=80, debug=True)
+        app.run(host='localhost', port=5000, debug=True)
