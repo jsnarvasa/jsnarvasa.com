@@ -51,7 +51,7 @@ def photoblog_pageNum(pageNum):
 @app.route("/getphotodetails")
 def getphotodetails():
     filename = request.args.get('img', 'Error', type=str)
-    image = Photos.query.filter_by(FileName=filename).first()
+    image = Photos.search_photo_filename(filename)
     Caption = image.Caption
     Place = image.Place
     City = image.City

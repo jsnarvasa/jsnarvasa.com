@@ -23,3 +23,7 @@ class Photos(db.Model):
         currentPage = int(currentPage)
         return cls.query.filter((Photos.Country.like('%' + searchQuery + '%')) | (Photos.City.like('%' + searchQuery + '%')) | (Photos.Place.like('%' + searchQuery + '%'))).order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
         
+    @classmethod
+    def search_photo_filename(cls, filename):
+        return cls.query.filter_by(FileName=filename).first()
+    
