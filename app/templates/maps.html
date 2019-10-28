@@ -1,0 +1,50 @@
+{% extends 'template.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin=""/>
+   <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+        integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+        crossorigin=""></script>
+    <style>
+        #mapid {height: 500px;}
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+    <div id="mapid"></div>
+
+    <script>
+        var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+        mymap.createPane('labels');
+        mymap.getPane('labels').style.zIndex = 650;
+        mymap.getPane('labels').style.pointerEvents = 'none';
+
+        // Map tile layer
+        var positron = L.tileLayer('https://api.mapbox.com/styles/v1/jsnarvasa/{id}/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'ck28jigmh38e81co315ayfuby',
+            accessToken: 'pk.eyJ1IjoianNuYXJ2YXNhIiwiYSI6ImNrMjdsYnFxZzBpb2YzY29qaTVjdXZ6OWkifQ.Tjk5Yjbs0sN4Sbe4tfCs6A'
+        }).addTo(mymap);
+
+        // Map label layer
+        var positronLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+            attribution: '©OpenStreetMap, ©CartoDB',
+            pane: 'labels'
+        }).addTo(mymap);
+
+        // Country boundary polygons layer
+        var country_boundaries = {{ country_geojson|tojson }}
+        var geojson = L.geoJson(country_boundaries).addTo(mymap);
+        geojson.eachLayer(function (layer) {
+            layer.setStyle({fillColor: 'red', color: 'red'})
+        });
+
+        // request doing it from https://api.mapbox.com/geocoding/v5/mapbox.places/-73.989,40.733.json?access_token=pk.eyJ1IjoianNuYXJ2YXNhIiwiYSI6ImNrMjdsYnFxZzBpb2YzY29qaTVjdXZ6OWkifQ.Tjk5Yjbs0sN4Sbe4tfCs6A&types=country,region
+
+    </script>
+{% endblock %}

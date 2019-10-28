@@ -23,6 +23,7 @@ app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
 db = SQLAlchemy(app)
 
 from models.Photos import Photos
+from models.Countries import Countries
 
 
 ######################################################
@@ -76,6 +77,13 @@ def search_pageNum(pageNum):
     for image in image_names:
         image_list.append(image.FileName)
     return jsonify(image_names=image_list)
+
+
+@app.route("/maps")
+def maps():
+    geojson = Countries.get_country(['US', 'AU', 'US'])
+    geojson = Countries.geojson_constructor(geojson)
+    return render_template('maps.html', country_geojson=geojson)
 
 
 @app.route('/sitemap')
