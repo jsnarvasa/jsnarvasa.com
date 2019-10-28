@@ -18,7 +18,19 @@
     <div id="mapid"></div>
 
     <script>
-        var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+        // Color generator
+        function generateRandomColor(){
+            color = '#30D5'
+            fifth = '89ABCDEF'
+            sixth = fifth + '0123456789ABCDEF'
+            color += fifth[Math.floor(Math.random() * fifth.length)]
+            color += sixth[Math.floor(Math.random() * sixth.length)]
+            return color
+        }
+
+        var mymap = L.map('mapid', {
+            'worldCopyJump': true
+        }).setView([20, 13], 2);
         mymap.createPane('labels');
         mymap.getPane('labels').style.zIndex = 650;
         mymap.getPane('labels').style.pointerEvents = 'none';
@@ -41,7 +53,7 @@
         var country_boundaries = {{ country_geojson|tojson }}
         var geojson = L.geoJson(country_boundaries).addTo(mymap);
         geojson.eachLayer(function (layer) {
-            layer.setStyle({fillColor: 'red', color: 'red'})
+            layer.setStyle({fillColor: generateRandomColor(), color: '#30D5C8'})
         });
 
         // request doing it from https://api.mapbox.com/geocoding/v5/mapbox.places/-73.989,40.733.json?access_token=pk.eyJ1IjoianNuYXJ2YXNhIiwiYSI6ImNrMjdsYnFxZzBpb2YzY29qaTVjdXZ6OWkifQ.Tjk5Yjbs0sN4Sbe4tfCs6A&types=country,region
