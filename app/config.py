@@ -16,5 +16,12 @@ database_conn = {
         'host': 'localhost',
         'schema': 'CornAndCheese'
     }
-    
+}
+
+mapbox = {
+    'TOKEN': {
+        'PROD': 'pk.eyJ1IjoianNuYXJ2YXNhIiwiYSI6ImNrMjdsYnFxZzBpb2YzY29qaTVjdXZ6OWkifQ.Tjk5Yjbs0sN4Sbe4tfCs6A',
+        'DEV': 'pk.eyJ1IjoianNuYXJ2YXNhIiwiYSI6ImNrMjdsYnFxZzBpb2YzY29qaTVjdXZ6OWkifQ.Tjk5Yjbs0sN4Sbe4tfCs6A'
+    },
+    'REVERSE_GEOCODING': 'https://api.mapbox.com/geocoding/v5/mapbox.places/'
 }

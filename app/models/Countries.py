@@ -13,11 +13,14 @@ class Countries(db.Model):
 
     @classmethod
     def get_country(cls, countryCode):
+    # INPUT - LIST of country code in 2 alphanumeric combination
+    # OUTPUT - LIST of Countries object that are in INPUT list
         return cls.query.filter(cls.ISO31661a2.in_(countryCode)).all()
-
 
     @classmethod
     def geojson_constructor(cls, results_object):
+    # Input - LIST of Countries object; containing all details from Countries
+    # Output - geoJSON data containing the boundary of the areas in the input object
         geojson = {}
         geojson['type'] = 'FeatureCollection'
         geojson['features'] = []

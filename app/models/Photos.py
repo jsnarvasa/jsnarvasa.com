@@ -1,4 +1,8 @@
+import requests
+from PIL import Image
+from PIL.ExifTags import TAGS, GPSTAGS
 from app import db
+import config
 
 class Photos(db.Model):
     __tablename__ = 'Photos'
@@ -10,7 +14,7 @@ class Photos(db.Model):
     Capture_Date = db.Column('Capture_Date', db.Date)
     Place = db.Column('Place', db.String(150))
     City = db.Column('City', db.String(150))
-    Country = db.Column('Country', db.String(150))
+    Country = db.Column('Country', db.String(2))
 
 
     @classmethod
@@ -26,4 +30,66 @@ class Photos(db.Model):
     @classmethod
     def search_photo_filename(cls, filename):
         return cls.query.filter_by(FileName=filename).first()
+
+    @staticmethod
+    def check_allowed_filetype(filename):
+    # Output - Returns boolean based on whether file's filetype is allowed
+        allowed_extensions = {'jpg', 'jpeg'}
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
     
+    @classmethod
+    def get_exif(cls, filename):
+        image = Image.open(filename)
+        image.verify()
+        return image._getexif()    
+
+    @staticmethod
+    def get_geotagging(exif):
+        geotagging = {}
+        for (idx, tag) in TAGS.items():
+            if tag == 'GPSInfo':
+                if idx not in exif:
+                    raise ValueError("No EXIF geotagging found")
+
+                for (key, val) in GPSTAGS.items():
+                    if key in exif[idx]:
+                        geotagging[val] = exif[idx][key]
+        
+        return geotagging
+
+    @staticmethod
+    def get_decimal_from_dms(dms, ref):
+        degrees = dms[0][0] / dms[0][1]
+        minutes = dms[1][0] / dms[1][1] / 60.0
+        seconds = dms[2][0] / dms[2][1] / 3600.0
+
+        if ref in ['S', 'W']:
+            degrees = -degrees
+            minutes = -minutes
+            seconds = -seconds
+
+        return round(degrees + minutes + seconds, 5)
+
+    @classmethod
+    def get_coordinates(cls, geotags):
+        lat = cls.get_decimal_from_dms(geotags['GPSLatitude'], geotags['GPSLatitudeRef'])
+        lon = cls.get_decimal_from_dms(geotags['GPSLongitude'], geotags['GPSLongitudeRef'])
+        return (lat,lon)
+
+
+    @staticmethod
+    def reverse_geocode(coordinates):
+        url = config.mapbox['REVERSE_GEOCODING'] + str(coordinates[1]) + ',' + str(coordinates[0]) + '.json'
+        parameters = {
+            'access_token' : config.mapbox['TOKEN']['DEV']
+        }
+        response = requests.get(url, params=parameters)
+        if response.status_code == 200:
+            response = response.json()
+            for feature in response['features']:
+                feature_type = feature['id'].split('.')
+                if feature_type[0] == 'country':
+                    country = feature['properties']['short_code'].upper()
+        else:
+            country = "error"
+        return country

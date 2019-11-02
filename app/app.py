@@ -1,7 +1,9 @@
-from flask import Flask, render_template, redirect, url_for, jsonify, request
+from flask import Flask, render_template, redirect, url_for, jsonify, request, flash
+from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
 from datetime import datetime
+import os
 import socket
 import config
 
@@ -20,6 +22,8 @@ else:
     app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
+app.config['UPLOAD_FOLDER'] = 'testinglang'
+app.secret_key = os.urandom(126)
 db = SQLAlchemy(app)
 
 from models.Photos import Photos
@@ -81,10 +85,49 @@ def search_pageNum(pageNum):
 
 @app.route("/maps")
 def maps():
-    geojson = Countries.get_country(['US', 'AU', 'US'])
+    if hostname == config.hostname['PROD']:
+        token = config.mapbox['TOKEN']['PROD']
+    else:
+        token = config.mapbox['TOKEN']['DEV']
+    countries = []
+    countries.append(Photos.reverse_geocode())
+    geojson = Countries.get_country(countries)
     geojson = Countries.geojson_constructor(geojson)
-    return render_template('maps.html', country_geojson=geojson)
+    return render_template('maps.html', country_geojson=geojson, token=token)
 
+
+@app.route("/upload", methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and Photos.check_allowed_filetype(file.filename):
+            filename = secure_filename(file.filename)
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            if not os.path.exists(os.path.join(dir_path, app.config['UPLOAD_FOLDER'])):
+                os.makedirs(os.path.join(dir_path, app.config['UPLOAD_FOLDER']))
+            try:
+                file.save(os.path.join(dir_path, app.config['UPLOAD_FOLDER'], filename))
+            except FileExistsError:
+                return "File already exists"
+            exif = Photos.get_exif(os.path.join(dir_path, app.config['UPLOAD_FOLDER'], '20190523_094432.jpg'))
+            geotag = Photos.get_geotagging(exif)
+            coordinates = Photos.get_coordinates(geotag)
+            country = Photos.reverse_geocode(coordinates)
+            return str(country)
+        else:
+            flash('Invalid file')
+            return redirect(request.url)
+    elif request.method == 'GET':
+        return render_template('upload.html')
 
 @app.route('/sitemap')
 def sitemap():
