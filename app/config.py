@@ -25,3 +25,8 @@ mapbox = {
     },
     'REVERSE_GEOCODING': 'https://api.mapbox.com/geocoding/v5/mapbox.places/'
 }
+
+photos = {
+    'ALLOWED_EXTENSIONS' : {'jpg', 'jpeg'},
+    'UPLOAD_DIRECTORY' : 'testinglang'
+}

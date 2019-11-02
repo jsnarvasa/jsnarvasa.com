@@ -22,12 +22,17 @@ else:
     app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
-app.config['UPLOAD_FOLDER'] = 'testinglang'
-app.secret_key = os.urandom(126)
+
+app.config['UPLOAD_FOLDER'] = config.photos['UPLOAD_DIRECTORY']
+dir_path = os.path.dirname(os.path.realpath(__file__))
+if not os.path.exists(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'])):
+    os.makedirs(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER']))
+
+app.secret_key = os.urandom(128)
 db = SQLAlchemy(app)
 
 from models.Photos import Photos
-from models.Countries import Countries
+from models.Area import Area
 
 
 ######################################################
@@ -89,10 +94,10 @@ def maps():
         token = config.mapbox['TOKEN']['PROD']
     else:
         token = config.mapbox['TOKEN']['DEV']
-    countries = []
-    countries.append(Photos.reverse_geocode())
-    geojson = Countries.get_country(countries)
-    geojson = Countries.geojson_constructor(geojson)
+    areas = []
+    areas.append('US')
+    geojson = Area.get_area(areas)
+    geojson = Area.geojson_constructor(geojson)
     return render_template('maps.html', country_geojson=geojson, token=token)
 
 
@@ -111,14 +116,11 @@ def upload():
             return redirect(request.url)
         if file and Photos.check_allowed_filetype(file.filename):
             filename = secure_filename(file.filename)
-            dir_path = os.path.dirname(os.path.realpath(__file__))
-            if not os.path.exists(os.path.join(dir_path, app.config['UPLOAD_FOLDER'])):
-                os.makedirs(os.path.join(dir_path, app.config['UPLOAD_FOLDER']))
             try:
-                file.save(os.path.join(dir_path, app.config['UPLOAD_FOLDER'], filename))
+                file.save(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], filename))
             except FileExistsError:
                 return "File already exists"
-            exif = Photos.get_exif(os.path.join(dir_path, app.config['UPLOAD_FOLDER'], '20190523_094432.jpg'))
+            exif = Photos.get_exif(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], '20190523_094432.jpg'))
             geotag = Photos.get_geotagging(exif)
             coordinates = Photos.get_coordinates(geotag)
             country = Photos.reverse_geocode(coordinates)

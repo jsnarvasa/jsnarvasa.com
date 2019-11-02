@@ -1,8 +1,14 @@
+import socket
 import requests
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 from app import db
 import config
+
+if socket.gethostname() == config.hostname['PROD']:
+    host = 'PROD'
+else:
+    host = 'DEV'
 
 class Photos(db.Model):
     __tablename__ = 'Photos'
@@ -34,14 +40,15 @@ class Photos(db.Model):
     @staticmethod
     def check_allowed_filetype(filename):
     # Output - Returns boolean based on whether file's filetype is allowed
-        allowed_extensions = {'jpg', 'jpeg'}
-        return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in config.photos['ALLOWED_EXTENSIONS']
     
-    @classmethod
-    def get_exif(cls, filename):
+    @staticmethod
+    def get_exif(filename):
+    # Input - Filename of image (incl. absolute path)
+    # Output - Image EXIF data
         image = Image.open(filename)
         image.verify()
-        return image._getexif()    
+        return image._getexif()
 
     @staticmethod
     def get_geotagging(exif):
@@ -59,6 +66,9 @@ class Photos(db.Model):
 
     @staticmethod
     def get_decimal_from_dms(dms, ref):
+    # Input - GPS coordinate in Degrees, Minutes, Seconds notation
+    # Output - GPS coordinate in decimal notation
+
         degrees = dms[0][0] / dms[0][1]
         minutes = dms[1][0] / dms[1][1] / 60.0
         seconds = dms[2][0] / dms[2][1] / 3600.0
@@ -72,17 +82,18 @@ class Photos(db.Model):
 
     @classmethod
     def get_coordinates(cls, geotags):
+    # Output - Returns GPS coordinates in (latitude, longitude) decimal notation TUPLE format
         lat = cls.get_decimal_from_dms(geotags['GPSLatitude'], geotags['GPSLatitudeRef'])
         lon = cls.get_decimal_from_dms(geotags['GPSLongitude'], geotags['GPSLongitudeRef'])
         return (lat,lon)
 
-
     @staticmethod
     def reverse_geocode(coordinates):
         url = config.mapbox['REVERSE_GEOCODING'] + str(coordinates[1]) + ',' + str(coordinates[0]) + '.json'
-        parameters = {
-            'access_token' : config.mapbox['TOKEN']['DEV']
-        }
+        if host == 'PROD':
+            parameters = {'access_token' : config.mapbox['TOKEN']['PROD']}
+        else:
+            parameters = {'access_token' : config.mapbox['TOKEN']['DEV']}
         response = requests.get(url, params=parameters)
         if response.status_code == 200:
             response = response.json()
