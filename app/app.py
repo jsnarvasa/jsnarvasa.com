@@ -23,6 +23,7 @@ else:
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
 
+# Create photos upload directory
 app.config['UPLOAD_FOLDER'] = config.photos['UPLOAD_DIRECTORY']
 dir_path = os.path.dirname(os.path.realpath(__file__))
 if not os.path.exists(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'])):
@@ -104,27 +105,44 @@ def maps():
 @app.route("/upload", methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
+        try:
+            file = request.files['file']
+        except Exception:
+            flash("No image file was selected")
             return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
+        
         if file and Photos.check_allowed_filetype(file.filename):
             filename = secure_filename(file.filename)
+            
+            staging_filename = config.photos['TEMP_FILENAME'] + '.' + filename.rsplit('.', 1)[1]
+            file.save(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], staging_filename))
+            hashed_filename = Photos.photo_hash(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], staging_filename)) + '.' + filename.rsplit('.', 1)[1]
             try:
-                file.save(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], filename))
+                os.rename(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], staging_filename), os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], hashed_filename))
             except FileExistsError:
-                return "File already exists"
-            exif = Photos.get_exif(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], '20190523_094432.jpg'))
-            geotag = Photos.get_geotagging(exif)
-            coordinates = Photos.get_coordinates(geotag)
-            country = Photos.reverse_geocode(coordinates)
-            return str(country)
+                flash("File already exists")
+                return redirect(request.url)
+            
+            try:
+                exif = Photos.get_exif(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], hashed_filename))
+                geotag = Photos.get_geotagging(exif)
+                coordinates = Photos.get_coordinates(geotag)
+                area = Photos.reverse_geocode(coordinates)
+            except Exception:
+                flash("Uploaded photo has invalid or no geolocation data")
+                return redirect(request.url)
+
+            caption = request.form['caption']
+            capture_date = request.form['capture_date']
+            place = request.form['place']
+            city = request.form['city']
+            photo = Photos(FileName=hashed_filename, Caption=caption, Upload_Date=datetime.today().strftime('%Y-%m-%d'), Capture_Date=capture_date, Place=place, City=city, Region=area[0], Country=area[1])
+            try:
+                db.session.add(photo)
+                db.session.commit()
+            except Exception:
+                pass
+            return str(area)
         else:
             flash('Invalid file')
             return redirect(request.url)

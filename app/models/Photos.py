@@ -1,5 +1,6 @@
 import socket
 import requests
+import hashlib
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 from app import db
@@ -13,13 +14,14 @@ else:
 class Photos(db.Model):
     __tablename__ = 'Photos'
 
-    PhotoID = db.Column('PhotoID',db.Integer, primary_key=True, autoincrement=True)
+    PhotoID = db.Column('PhotoID', db.Integer, primary_key=True, autoincrement=True)
     FileName = db.Column('FileName', db.String(100), nullable=False, unique=True)
     Caption = db.Column('Caption', db.String(5000))
     Upload_Date = db.Column('Upload_Date', db.Date, nullable=False)
     Capture_Date = db.Column('Capture_Date', db.Date)
     Place = db.Column('Place', db.String(150))
     City = db.Column('City', db.String(150))
+    Region = db.Column('Region', db.String(6))
     Country = db.Column('Country', db.String(2))
 
 
@@ -42,6 +44,11 @@ class Photos(db.Model):
     # Output - Returns boolean based on whether file's filetype is allowed
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in config.photos['ALLOWED_EXTENSIONS']
     
+    @staticmethod
+    def photo_hash(filename):
+        photo = open(filename, 'rb').read()
+        return hashlib.md5(photo).hexdigest()
+
     @staticmethod
     def get_exif(filename):
     # Input - Filename of image (incl. absolute path)
@@ -101,6 +108,8 @@ class Photos(db.Model):
                 feature_type = feature['id'].split('.')
                 if feature_type[0] == 'country':
                     country = feature['properties']['short_code'].upper()
+                elif feature_type[0] == 'region':
+                    region = feature['properties']['short_code'].upper()
         else:
-            country = "error"
-        return country
+            raise Exception
+        return (region, country)
