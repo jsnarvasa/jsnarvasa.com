@@ -5,11 +5,19 @@ from app import db
 class Area(db.Model):
     __tablename__ = "Area"
 
-    AreaCode = db.Column('AreaCode', db.String(20), primary_key=True) # ISO31661a2 code
-    AreaType = db.Column('AreaType', db.String(20), nullable=False)
-    AreaName = db.Column('AreaName', db.String(150), nullable=False)
-    Geometry = db.Column('Geometry', MEDIUMTEXT)
+    AreaCode = db.Column('AreaCode', db.String(20), primary_key=True) # ISO 31661a2 or ISO 3166-2 code
+    AreaType = db.Column('AreaType', db.String(20), nullable=False) # The ISO standard it follows
+    AreaName = db.Column('AreaName', db.String(150), nullable=False) # Free text identifier
+    Geometry = db.Column('Geometry', MEDIUMTEXT) # Boundary data
 
+
+    @classmethod
+    def is_area_exist(cls, areacode):
+    # OUTPUT - Returns BOOL based on whether the areacode exists in the database
+        if cls.query.filter_by(AreaCode=areacode).first() is None:
+            return False
+        else:
+            return True
 
     @classmethod
     def get_area(cls, areaCode):

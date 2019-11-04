@@ -50,7 +50,7 @@
         }).addTo(mymap);
 
         // Country boundary polygons layer
-        var country_boundaries = {{ country_geojson|tojson }}
+        var country_boundaries = {{ geojson|tojson }}
         var geojson = L.geoJson(country_boundaries).addTo(mymap);
         geojson.eachLayer(function (layer) {
             layer.setStyle({fillColor: generateRandomColor(), color: '#30D5C8'})

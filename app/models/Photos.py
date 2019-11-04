@@ -15,10 +15,10 @@ class Photos(db.Model):
     __tablename__ = 'Photos'
 
     PhotoID = db.Column('PhotoID', db.Integer, primary_key=True, autoincrement=True)
-    FileName = db.Column('FileName', db.String(100), nullable=False, unique=True)
+    FileName = db.Column('FileName', db.String(100), nullable=False, unique=True) # Hashed value of photo
     Caption = db.Column('Caption', db.String(5000))
-    Upload_Date = db.Column('Upload_Date', db.Date, nullable=False)
-    Capture_Date = db.Column('Capture_Date', db.Date)
+    Upload_Date = db.Column('Upload_Date', db.Date, nullable=False) # Automatically added by the inserter
+    Capture_Date = db.Column('Capture_Date', db.Date) # Date photo taken
     Place = db.Column('Place', db.String(150))
     City = db.Column('City', db.String(150))
     Region = db.Column('Region', db.String(6))
@@ -27,21 +27,24 @@ class Photos(db.Model):
 
     @classmethod
     def get_photo_list(cls, currentPage=1, perPage=9):
+        # Output - Returns LIST of Photos objects
         currentPage = int(currentPage)
         return cls.query.order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
 
     @classmethod
     def search_photo_list(cls, searchQuery, currentPage=1, perPage=9):
+        # Output - Returns multiple Photos objects, where geography matches the searchQuery
         currentPage = int(currentPage)
         return cls.query.filter((Photos.Country.like('%' + searchQuery + '%')) | (Photos.City.like('%' + searchQuery + '%')) | (Photos.Place.like('%' + searchQuery + '%'))).order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
         
     @classmethod
     def search_photo_filename(cls, filename):
+        # Output - Returns single Photos object, that matches filename
         return cls.query.filter_by(FileName=filename).first()
 
     @staticmethod
     def check_allowed_filetype(filename):
-    # Output - Returns boolean based on whether file's filetype is allowed
+        # Output - Returns boolean based on whether file's filetype is allowed
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in config.photos['ALLOWED_EXTENSIONS']
     
     @staticmethod

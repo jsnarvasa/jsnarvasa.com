@@ -8,8 +8,9 @@ import socket
 import config
 
 
-# Determining environment
+# Environment
 hostname = socket.gethostname()
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 ######################################################
 # Initialise Flask and SQLAlchemy classes
@@ -25,13 +26,14 @@ app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
 
 # Create photos upload directory
 app.config['UPLOAD_FOLDER'] = config.photos['UPLOAD_DIRECTORY']
-dir_path = os.path.dirname(os.path.realpath(__file__))
-if not os.path.exists(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'])):
-    os.makedirs(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER']))
+photo_upload_dir_path = os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'])
+if not os.path.exists(photo_upload_dir_path):
+    os.makedirs(photo_upload_dir_path)
 
 app.secret_key = os.urandom(128)
 db = SQLAlchemy(app)
 
+# Models
 from models.Photos import Photos
 from models.Area import Area
 
@@ -47,7 +49,29 @@ def index():
 @app.route("/photoblog")
 def photoblog():
     image_names = Photos.get_photo_list()
-    return render_template("gallery.html", image_names=image_names)
+    
+    # geoJson
+    regions = []
+    boundaries = []
+    for image in image_names:
+        regions.append(image.Region)
+    for (idx, region) in enumerate(regions):
+        if Area.is_area_exist(region):
+            # Check first, if region boundary data exists
+            boundaries.append(region)
+        else:
+            # Default to country boundary data
+            boundaries.append(image_names[idx].Country)
+    areas = Area.get_area(boundaries)
+    geojson = Area.geojson_constructor(areas)
+
+    # Mapbox token data
+    if hostname == config.hostname['PROD']:
+        token = config.mapbox['TOKEN']['PROD']
+    else:
+        token = config.mapbox['TOKEN']['DEV']
+    
+    return render_template("gallery.html", image_names=image_names, geojson=geojson, token=token)
 
 
 @app.route("/photoblog/<pageNum>")
@@ -89,17 +113,17 @@ def search_pageNum(pageNum):
     return jsonify(image_names=image_list)
 
 
-@app.route("/maps")
-def maps():
-    if hostname == config.hostname['PROD']:
-        token = config.mapbox['TOKEN']['PROD']
-    else:
-        token = config.mapbox['TOKEN']['DEV']
-    areas = []
-    areas.append('US')
-    geojson = Area.get_area(areas)
-    geojson = Area.geojson_constructor(geojson)
-    return render_template('maps.html', country_geojson=geojson, token=token)
+#@app.route("/maps")
+#def maps():
+#    if hostname == config.hostname['PROD']:
+#        token = config.mapbox['TOKEN']['PROD']
+#    else:
+#        token = config.mapbox['TOKEN']['DEV']
+#    areas = []
+#    areas.append('US')
+#    geojson = Area.get_area(areas)
+#    geojson = Area.geojson_constructor(geojson)
+#    return render_template('maps.html', country_geojson=geojson, token=token)
 
 
 @app.route("/upload", methods=['GET', 'POST'])
@@ -115,21 +139,23 @@ def upload():
             filename = secure_filename(file.filename)
             
             staging_filename = config.photos['TEMP_FILENAME'] + '.' + filename.rsplit('.', 1)[1]
-            file.save(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], staging_filename))
-            hashed_filename = Photos.photo_hash(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], staging_filename)) + '.' + filename.rsplit('.', 1)[1]
+            file.save(os.path.join(photo_upload_dir_path, staging_filename))
+            hashed_filename = Photos.photo_hash(os.path.join(photo_upload_dir_path, staging_filename)) + '.' + filename.rsplit('.', 1)[1]
             try:
-                os.rename(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], staging_filename), os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], hashed_filename))
+                os.rename(os.path.join(photo_upload_dir_path, staging_filename), os.path.join(photo_upload_dir_path, hashed_filename))
             except FileExistsError:
-                flash("File already exists")
+                flash("File already exists", 'error')
+                os.remove(os.path.join(photo_upload_dir_path, staging_filename))
                 return redirect(request.url)
             
             try:
-                exif = Photos.get_exif(os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'], hashed_filename))
+                exif = Photos.get_exif(os.path.join(photo_upload_dir_path, hashed_filename))
                 geotag = Photos.get_geotagging(exif)
                 coordinates = Photos.get_coordinates(geotag)
                 area = Photos.reverse_geocode(coordinates)
             except Exception:
                 flash("Uploaded photo has invalid or no geolocation data")
+                os.remove(os.path.join(photo_upload_dir_path, staging_filename))
                 return redirect(request.url)
 
             caption = request.form['caption']

@@ -1,11 +1,16 @@
-<!doctype html>
+{% extends 'template.html' %}
+
+{% block body %}
+
     <title>Upload new File</title>
     <h1>Upload new File</h1>
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            {% for message in messages %}
-                <p> {{ message }}</p>
+            <ul class=flashes>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
             {% endfor %}
+            </ul>
         {% endif %}
     {% endwith %}
     <form method=post enctype=multipart/form-data>
@@ -16,3 +21,5 @@
       <input type="text" name="city">
       <input type=submit value=Upload>
     </form>
+
+{% endblock %}
