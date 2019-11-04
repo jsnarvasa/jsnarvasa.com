@@ -28,6 +28,6 @@ mapbox = {
 
 photos = {
     'ALLOWED_EXTENSIONS' : {'jpg', 'jpeg'},
-    'UPLOAD_DIRECTORY' : 'testinglang',
+    'UPLOAD_DIRECTORY' : 'photos',
     'TEMP_FILENAME' : 'staging'
 }

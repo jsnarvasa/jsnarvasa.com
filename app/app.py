@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
 from datetime import datetime
+from sqlalchemy import exc
 import os
 import socket
 import config
@@ -52,18 +53,18 @@ def photoblog():
     
     # geoJson
     regions = []
-    boundaries = []
+    areas = []
     for image in image_names:
         regions.append(image.Region)
     for (idx, region) in enumerate(regions):
         if Area.is_area_exist(region):
             # Check first, if region boundary data exists
-            boundaries.append(region)
+            areas.append(region)
         else:
             # Default to country boundary data
-            boundaries.append(image_names[idx].Country)
-    areas = Area.get_area(boundaries)
-    geojson = Area.geojson_constructor(areas)
+            areas.append(image_names[idx].Country)
+    boundaries = Area.get_area(areas)
+    geojson = Area.geojson_constructor(boundaries)
 
     # Mapbox token data
     if hostname == config.hostname['PROD']:
@@ -113,34 +114,25 @@ def search_pageNum(pageNum):
     return jsonify(image_names=image_list)
 
 
-#@app.route("/maps")
-#def maps():
-#    if hostname == config.hostname['PROD']:
-#        token = config.mapbox['TOKEN']['PROD']
-#    else:
-#        token = config.mapbox['TOKEN']['DEV']
-#    areas = []
-#    areas.append('US')
-#    geojson = Area.get_area(areas)
-#    geojson = Area.geojson_constructor(geojson)
-#    return render_template('maps.html', country_geojson=geojson, token=token)
-
-
 @app.route("/upload", methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
         try:
             file = request.files['file']
         except Exception:
-            flash("No image file was selected")
+            flash("No image file was selected", "error")
             return redirect(request.url)
         
         if file and Photos.check_allowed_filetype(file.filename):
             filename = secure_filename(file.filename)
+            file_extension = filename.rsplit('.', 1)[1]
             
-            staging_filename = config.photos['TEMP_FILENAME'] + '.' + filename.rsplit('.', 1)[1]
+            # Save image file with staging filename
+            staging_filename = config.photos['TEMP_FILENAME'] + '.' + file_extension
             file.save(os.path.join(photo_upload_dir_path, staging_filename))
-            hashed_filename = Photos.photo_hash(os.path.join(photo_upload_dir_path, staging_filename)) + '.' + filename.rsplit('.', 1)[1]
+            
+            # Generate hashed filename for uploaded image, and rename from staging to hashed filename
+            hashed_filename = Photos.photo_hash(os.path.join(photo_upload_dir_path, staging_filename)) + '.' + file_extension
             try:
                 os.rename(os.path.join(photo_upload_dir_path, staging_filename), os.path.join(photo_upload_dir_path, hashed_filename))
             except FileExistsError:
@@ -148,6 +140,7 @@ def upload():
                 os.remove(os.path.join(photo_upload_dir_path, staging_filename))
                 return redirect(request.url)
             
+            # Obtain geolocation of uploaded image
             try:
                 exif = Photos.get_exif(os.path.join(photo_upload_dir_path, hashed_filename))
                 geotag = Photos.get_geotagging(exif)
@@ -155,23 +148,33 @@ def upload():
                 area = Photos.reverse_geocode(coordinates)
             except Exception:
                 flash("Uploaded photo has invalid or no geolocation data")
-                os.remove(os.path.join(photo_upload_dir_path, staging_filename))
+                os.remove(os.path.join(photo_upload_dir_path, hashed_filename))
                 return redirect(request.url)
 
-            caption = request.form['caption']
-            capture_date = request.form['capture_date']
-            place = request.form['place']
-            city = request.form['city']
-            photo = Photos(FileName=hashed_filename, Caption=caption, Upload_Date=datetime.today().strftime('%Y-%m-%d'), Capture_Date=capture_date, Place=place, City=city, Region=area[0], Country=area[1])
+            photo = Photos(FileName=hashed_filename,
+                Caption=request.form['caption'],
+                Upload_Date=datetime.today().strftime('%Y-%m-%d'),
+                Capture_Date=request.form['capture_date'],
+                Place=request.form['place'],
+                City=request.form['city'],
+                Region=area[0],
+                Country=area[1])
             try:
                 db.session.add(photo)
                 db.session.commit()
-            except Exception:
-                pass
-            return str(area)
+            except exc.IntegrityError:
+                flash("Photo already exists in the database")
+                db.session.rollback()
+                os.remove(os.path.join(photo_upload_dir_path, hashed_filename))
+                return redirect(request.url)
+            else:
+                flash("Photo upload successful")
+                return redirect(url_for('upload'))
+
         else:
             flash('Invalid file')
             return redirect(request.url)
+            
     elif request.method == 'GET':
         return render_template('upload.html')
 
