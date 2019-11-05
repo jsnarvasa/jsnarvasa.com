@@ -161,13 +161,13 @@ def upload():
                 Country=area[1])
             try:
                 db.session.add(photo)
-                db.session.commit()
             except exc.IntegrityError:
                 flash("Photo already exists in the database")
                 db.session.rollback()
                 os.remove(os.path.join(photo_upload_dir_path, hashed_filename))
                 return redirect(request.url)
             else:
+                db.session.commit()
                 flash("Photo upload successful")
                 return redirect(url_for('upload'))
 

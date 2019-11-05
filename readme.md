@@ -53,3 +53,8 @@ docker run --name cornandcheese --link cornandcheesedb:mysql -d -p 80:80 -t corn
 4. Create link file of nginx entry in sites-enabled directory
 5. Run "sudo systemctl start jsnarvasa.service"
 6. May need to restart nginx "sudo systemctl restart nginx" or just reload
+
+# Inserting Area Boundary static data in MySQL database
+1. Update geo-countries_zip geojson file to be a .py file and create a dictionary variable that countains the whole file
+2. run geojson_sql_constructor.  This will create a boundaries.sql file
+3. Run mysql -f -uroot -p'<password>' CornAndCheese < boundaries.sql to upload boundaries data, while forcing write since some entries may violate unique constraints
