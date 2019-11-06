@@ -1,3 +1,4 @@
+import os
 import socket
 import requests
 import hashlib
@@ -116,3 +117,45 @@ class Photos(db.Model):
         else:
             raise Exception
         return (region, country)
+
+    @staticmethod
+    def rotate_photo(img):
+        try:
+            for orientation in TAGS.keys():
+                if TAGS[orientation]=='Orientation':
+                    break
+
+            exif=dict(img._getexif().items())
+
+            if exif[orientation] == 3:
+                img=img.rotate(180, expand=True)
+            elif exif[orientation] == 6:
+                img=img.rotate(270, expand=True)
+            elif exif[orientation] == 8:
+                img=img.rotate(90, expand=True)
+
+            return img
+
+        except (AttributeError, KeyError, IndexError):
+            # cases: image don't have getexif
+            return img
+
+    @classmethod
+    def get_photo_dimensions(cls, photo):
+        with Image.open(photo) as img:
+            img = cls.rotate_photo(img)
+            width, height = img.size
+        return (width, height)
+
+    @classmethod
+    def generate_thumbnail(cls, photo, width, height):
+        if width > height:
+            size = config.photos['THUMBNAIL_LANDSCAPE']
+        elif height > width:
+            size = config.photos['THUMBNAIL_PORTRAIT']
+        image = Image.open(photo)
+        image = cls.rotate_photo(image)
+        image.thumbnail(size, Image.ANTIALIAS)
+        filename = os.path.basename(photo)
+        thumbnail_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'static', 'photos', config.photos['THUMBNAIL_DIRECTORY'])
+        image.save(os.path.join(thumbnail_dir, filename), 'JPEG')

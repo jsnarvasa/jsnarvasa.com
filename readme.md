@@ -58,3 +58,18 @@ docker run --name cornandcheese --link cornandcheesedb:mysql -d -p 80:80 -t corn
 1. Update geo-countries_zip geojson file to be a .py file and create a dictionary variable that countains the whole file
 2. run geojson_sql_constructor.  This will create a boundaries.sql file
 3. Run mysql -f -uroot -p'<password>' CornAndCheese < boundaries.sql to upload boundaries data, while forcing write since some entries may violate unique constraints
+
+## License
+
+All data is licensed under the [Open Data Commons Public Domain Dedication and License][pddl]. 
+
+Note that the original data from [Natural Earth][naturalearth] is public domain. While no credit is 
+formally required a link back or credit to [Natural Earth][naturalearth], [Lexman][lexman] and the [Open Knowledge Foundation][okfn] is much appreciated.
+
+All source code is licenced under the [MIT licence][mit].
+
+[mit]: https://opensource.org/licenses/MIT
+[naturalearth]: http://www.naturalearthdata.com/
+[pddl]: http://opendatacommons.org/licenses/pddl/1.0/
+[lexman]: http://github.com/lexman
+[okfn]: http://okfn.org/

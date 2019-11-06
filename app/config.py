@@ -29,5 +29,8 @@ mapbox = {
 photos = {
     'ALLOWED_EXTENSIONS' : {'jpg', 'jpeg'},
     'UPLOAD_DIRECTORY' : 'photos',
-    'TEMP_FILENAME' : 'staging'
+    'TEMP_FILENAME' : 'staging',
+    'THUMBNAIL_PORTRAIT' : (400, 600),
+    'THUMBNAIL_LANDSCAPE' : (600, 400),
+    'THUMBNAIL_DIRECTORY' : 'thumbnail'
 }

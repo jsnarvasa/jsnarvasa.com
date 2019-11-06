@@ -30,6 +30,8 @@ app.config['UPLOAD_FOLDER'] = config.photos['UPLOAD_DIRECTORY']
 photo_upload_dir_path = os.path.join(dir_path, 'static', app.config['UPLOAD_FOLDER'])
 if not os.path.exists(photo_upload_dir_path):
     os.makedirs(photo_upload_dir_path)
+if not os.path.exists(os.path.join(photo_upload_dir_path, config.photos['THUMBNAIL_DIRECTORY'])):
+    os.makedirs(os.path.join(photo_upload_dir_path, config.photos['THUMBNAIL_DIRECTORY']))
 
 app.secret_key = os.urandom(128)
 db = SQLAlchemy(app)
@@ -167,6 +169,8 @@ def upload():
                 os.remove(os.path.join(photo_upload_dir_path, hashed_filename))
                 return redirect(request.url)
             else:
+                width, height = Photos.get_photo_dimensions(os.path.join(photo_upload_dir_path, hashed_filename))
+                Photos.generate_thumbnail(os.path.join(photo_upload_dir_path, hashed_filename), width, height)
                 db.session.commit()
                 flash("Photo upload successful")
                 return redirect(url_for('upload'))
