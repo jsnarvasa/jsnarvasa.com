@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from random import randint
 from datetime import datetime
 from sqlalchemy import exc
+from PIL import Image
 import os
 import socket
 import config
@@ -83,7 +84,23 @@ def photoblog_pageNum(pageNum):
     image_list = []
     for image in image_names:
         image_list.append(image.FileName)
-    return jsonify(image_names=image_list)
+
+    # geoJson
+    regions = []
+    areas = []
+    for image in image_names:
+        regions.append(image.Region)
+    for (idx, region) in enumerate(regions):
+        if Area.is_area_exist(region):
+            # Check first, if region boundary data exists
+            areas.append(region)
+        else:
+            # Default to country boundary data
+            areas.append(image_names[idx].Country)
+    boundaries = Area.get_area(areas)
+    geojson = Area.geojson_constructor(boundaries)
+
+    return jsonify(image_names=image_list, geojson=geojson)
 
 
 @app.route("/getphotodetails")
@@ -132,7 +149,7 @@ def upload():
             # Save image file with staging filename
             staging_filename = config.photos['TEMP_FILENAME'] + '.' + file_extension
             file.save(os.path.join(photo_upload_dir_path, staging_filename))
-            
+
             # Generate hashed filename for uploaded image, and rename from staging to hashed filename
             hashed_filename = Photos.photo_hash(os.path.join(photo_upload_dir_path, staging_filename)) + '.' + file_extension
             try:
@@ -152,6 +169,11 @@ def upload():
                 flash("Uploaded photo has invalid or no geolocation data")
                 os.remove(os.path.join(photo_upload_dir_path, hashed_filename))
                 return redirect(request.url)
+
+            # Rotates the photo to the correct orientation.  Pillow also inadvertently strips all EXIF data
+            image_file = Image.open(os.path.join(photo_upload_dir_path, hashed_filename))
+            image_file = Photos.rotate_photo(image_file)
+            image_file.save(os.path.join(photo_upload_dir_path, hashed_filename))
 
             photo = Photos(FileName=hashed_filename,
                 Caption=request.form['caption'],

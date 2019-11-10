@@ -82,8 +82,8 @@ $(document).ready(function() {
     function isMoreContent(pageNum){
         pageCount++;
         nextImageCount = 1;
-        $.getJSON(url='/' + page + '/'+ pageCount, data='q=' + searchQuery, success=function(images){
-            nextImageCount = images.image_names.length;
+        $.getJSON(url='/' + page + '/'+ pageCount, data='q=' + searchQuery, success=function(results){
+            nextImageCount = results.image_names.length;
         }).then(function(){
             if(nextImageCount == 0){
                 $('#loadMoreButton').css('visibility', 'hidden');
@@ -96,11 +96,16 @@ $(document).ready(function() {
     function loadMore(pageNum){
         pageCount++;
         //AJAX request
-        $.getJSON(url='/' + page + '/'+ pageCount, data='q=' + searchQuery, success=function(images){
-            images = images.image_names;
+        $.getJSON(url='/' + page + '/'+ pageCount, data='q=' + searchQuery, success=function(results){
+            images = results.image_names;
             images.forEach(FileName => {
                 $('.card-columns').append('<div class="card"><img class="img-fluid gallery-image" id="' + FileName + '" src="static/photos/thumbnail/' + FileName + '"></div>');
             });
+            additional_geojson = results.geojson.features;
+            country_boundaries.features = country_boundaries.features.concat(additional_geojson);
+            // Refreshes the map, to load new boundaries
+            remove_geojson_layer();
+            add_geojson_layer(country_boundaries);
         });
         isMoreContent(pageCount);
         $(window).on("load", function(){

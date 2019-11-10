@@ -53,9 +53,6 @@
 {% endblock %}
 
 {% block jslibrary %}
-    <!-- Special javascript for gallery.html -->
-    <script src="{{ url_for('static',filename='js/gallery.js') }}"></script>
-
     <script>
         // Color generator
         function generateRandomColor(){
@@ -88,13 +85,25 @@
             pane: 'labels'
         }).addTo(mymap);
 
-        // Country boundary polygons layer
+        // Country boundary polygons layer        
         var country_boundaries = {{ geojson|tojson }}
-        var geojson = L.geoJson(country_boundaries).addTo(mymap);
-        geojson.eachLayer(function (layer) {
-            layer.setStyle({fillColor: generateRandomColor(), color: '#30D5C8'})
-        });
+        add_geojson_layer(country_boundaries);
+
+        var geojson_layer;
+        function add_geojson_layer(area_boundaries) {
+            geojson_layer = L.geoJson(area_boundaries).addTo(mymap);
+            geojson_layer.eachLayer(function (layer) {
+                layer.setStyle({fillColor: generateRandomColor(), color: '#30D5C8'})
+            });
+        };
+
+        function remove_geojson_layer() {
+            mymap.removeLayer(geojson_layer);
+        };
 
     </script>
+    
+    <!-- Special javascript for gallery.html -->
+    <script src="{{ url_for('static',filename='js/gallery.js') }}"></script>
 
 {% endblock %}
