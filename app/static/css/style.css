@@ -4,7 +4,7 @@ body {
 }
 
 .navbar {
-    z-index: 18;
+    z-index: 1018;
 }
 
 .navbar-scroll-padding {
@@ -86,7 +86,7 @@ h2, p#intro-text {
     visibility:hidden;
     background-color:#000000;
     opacity:0.8;
-    z-index:19;
+    z-index:1019;
 }
 
 #overlay-container{
@@ -95,7 +95,7 @@ h2, p#intro-text {
     position: absolute;
     left:5%;
     right:5%;
-    z-index: 20;
+    z-index: 1020;
 }
 
 #overlay-close{
