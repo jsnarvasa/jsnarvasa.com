@@ -15,6 +15,14 @@ hostname = socket.gethostname()
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 ######################################################
+# Logging
+######################################################
+import logging
+
+logging.basicConfig(filename='error.log',level=logging.DEBUG)
+
+
+######################################################
 # Initialise Flask and SQLAlchemy classes
 ######################################################
 app = Flask(__name__)
