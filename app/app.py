@@ -1,5 +1,6 @@
-from flask import Flask, render_template, redirect, url_for, jsonify, request, flash
+from flask import Flask, render_template, redirect, url_for, jsonify, request, flash, session
 from werkzeug.utils import secure_filename
+from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
 from datetime import datetime
@@ -55,6 +56,17 @@ db = SQLAlchemy(app)
 from models.Photos import Photos
 from models.Area import Area
 
+
+######################################################
+# View Decorators
+######################################################
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session['username'] is None:
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
 
 ######################################################
 # Routes
@@ -148,6 +160,7 @@ def search_pageNum(pageNum):
 
 
 @app.route("/upload", methods=['GET', 'POST'])
+@login_required
 def upload():
     if request.method == 'POST':
         try:
@@ -217,6 +230,26 @@ def upload():
             
     elif request.method == 'GET':
         return render_template('upload.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        if request.form['username'] == 'jsnarvasa' and request.form['password'] == 'test':
+            session['username'] = request.form['username']
+            return redirect(url_for('upload'))
+        else:
+            return redirect(url_for('login'))
+
+
+@app.route('/logout')
+def logout():
+    # remove username from the session
+    session.pop('username', None)
+    return redirect(url_for('index'))
+
 
 @app.route('/sitemap')
 def sitemap():
