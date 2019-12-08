@@ -20,7 +20,12 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 ######################################################
 import logging
 
-logging.basicConfig(filename='error.log',level=logging.DEBUG)
+logs_dir_path = os.path.join(dir_path, 'logs')
+log_file_path = os.path.join(logs_dir_path, 'web.log')
+if not os.path.exists(logs_dir_path):
+    os.makedirs(logs_dir_path)
+
+logging.basicConfig(filename=log_file_path, level=logging.INFO)
 
 
 ######################################################

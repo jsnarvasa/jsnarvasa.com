@@ -1,6 +1,9 @@
 # Ignore /venv folder
 /app/venv/
 
+# Ignore logs folder
+/app/logs/
+
 # Ignore /static/photos folder
 /app/static/photos/
 
