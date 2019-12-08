@@ -4,8 +4,7 @@ import requests
 import hashlib
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
-from flask import request
-from app import db, app
+from app import db
 import config
 
 if socket.gethostname() == config.hostname['PROD']:
@@ -107,7 +106,6 @@ class Photos(db.Model):
         else:
             parameters = {'access_token' : config.mapbox['TOKEN']['DEV']}
         response = requests.get(url, params=parameters)
-        app.logger.info(request.headers.get("Referer"))
         if response.status_code == 200:
             response = response.json()
             for feature in response['features']:
