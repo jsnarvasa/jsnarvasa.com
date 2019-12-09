@@ -65,7 +65,8 @@
         }
 
         var mymap = L.map('mapid', {
-            'worldCopyJump': true
+            'worldCopyJump': true,
+            'minZoom': 2
         }).setView([20, 13], 2);
         mymap.createPane('labels');
         mymap.getPane('labels').style.zIndex = 650;
