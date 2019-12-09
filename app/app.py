@@ -146,7 +146,29 @@ def getphotodetails():
 def search():
     searchQuery = request.args.get('q', '')
     image_names = Photos.search_photo_list(searchQuery)
-    return render_template('gallery.html', image_names=image_names, searchQuery=searchQuery)
+
+    # geoJson
+    regions = []
+    areas = []
+    for image in image_names:
+        regions.append(image.Region)
+    for (idx, region) in enumerate(regions):
+        if Area.is_area_exist(region):
+            # Check first, if region boundary data exists
+            areas.append(region)
+        else:
+            # Default to country boundary data
+            areas.append(image_names[idx].Country)
+    boundaries = Area.get_area(areas)
+    geojson = Area.geojson_constructor(boundaries)
+
+    # Mapbox token data
+    if hostname == config.hostname['PROD']:
+        token = config.mapbox['TOKEN']['PROD']
+    else:
+        token = config.mapbox['TOKEN']['DEV']
+
+    return render_template('gallery.html', image_names=image_names, searchQuery=searchQuery, geojson=geojson, token=token)
 
 
 @app.route("/search/<pageNum>", methods=["GET"])
