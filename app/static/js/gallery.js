@@ -131,10 +131,10 @@ $(document).ready(function() {
 
     // Page header text
     if(page=='photoblog'){
-        $('h1.pageHeader').text('Photoblog');
-        $('p.pageHeader').text("The section where I place the stream of photos I've gathered over the past (and coming) years.  Formely collecting dust in my hard drive, I used to wonder what to do with them.");
+        $('h3.pageHeader').text('Photoblog');
+        $('p.pageHeader').text("A virtual scratch map, where time and place meets, and a story is told...");
     }
     else{
-        $('h1.pageHeader').text('Search Results for ' + searchQuery);
+        $('h3.pageHeader').text('Search Results for ' + searchQuery);
     };
 });

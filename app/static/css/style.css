@@ -21,13 +21,14 @@ body {
 
 #footer {
     background-color: #353535;
-    padding-top:1em;
-    padding-bottom:1em;
+    padding-top:0.6em;
+    padding-bottom:0.6em;
 }
 
 #footer-text {
     color: #B2AFAB;
     margin-bottom: 0;
+    font-size: small;
 }
 
 #orange {
@@ -36,6 +37,10 @@ body {
 
 .pageHeader{
     margin: 1em 0 0 0;
+}
+
+p.pageHeader {
+    font-weight: lighter;
 }
 
 /* Only used index.html */
@@ -66,8 +71,16 @@ div#intro-text {
     padding:2em;
 }
 
-h2, p#intro-text {
+h3#intro-text {
     color:#f9f9f9;
+}
+
+p#intro-text {
+    color:#d6d2d2;
+}
+
+.f32 .flag {
+    height: 25px !important;
 }
 
 /* Only used gallery.html */

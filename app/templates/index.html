@@ -16,6 +16,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
         <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="//github.com/downloads/lafeber/world-flags-sprite/flags32.css"
+        />
+
         <title>Home | Jesse S Narvasa</title>
     </head>
     <body>
@@ -35,6 +42,9 @@
                     <li class="nav-item active">
                         <a class="nav-link" style="color:{{generated_color}}" href="/photoblog">Photoblog<span class="sr-only"></span></a>
                     </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" style="color:{{generated_color}}" href="https://quaver.me/">Quaver<span class="sr-only"></span></a>
+                    </li>
                     </ul>
                     <form class="form-inline my-2 my-lg-0" method="GET" action="/search">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search by Location" aria-label="Search" name="q" style="background:transparent;border-color:{{generated_color}}">
@@ -48,21 +58,23 @@
         <!-- The splash image -->
         <div class="container-fluid" id="splash-image-div">
             <img class="img-fluid" id="splash-image" src="{{url_for('static', filename='images/splashscreen.jpg')}}">
-            <h1 class="text-center" id="splash-intro"><strong>I AM JESSE S NARVASA.</strong></h1>
+            <div id="splash-intro">
+                <h4 class="text-center" style="font-weight: lighter"><i>Hi there, I'm</i></h4>
+                <h1 class="text-center"><strong>JESSE S. NARVASA</strong></h1>
+            </div>
         </div>
 
     
         <!-- Intro div -->
-        <div class="container-fluid" style="background-color:#ff5000">
+        <div class="container-fluid" style="background-color:#e4591c">
             <div class="row" style="margin:0;">
                 <div class="col-lg" id="intro-text">
-                    <h2 class="text-center" id="intro-text">Corn and Cheese</h2>
+                    <h3 class="text-center" id="intro-text" style="font-weight: lighter"><strong>Corn and Cheese</strong></h3>
                     <hr/>
                     <p class="text-left" id="intro-text">If I were to give this photoblog a name, I'll call it just that.</p>
-                    <p class="text-left" id="intro-text">It's an analogy; to remind myself that life is too short not to appreciate every second we have: the awkward, the uncertain, the corny and the cheesy moments of life.  And with that appreciation, a mantra to live by; to be the person you've always wanted to be and aspire to become.</p>
-                    <p class="text-left" id="intro-text">A little about myself.  Now in Sydney, I work within technology at a financial services firm after graduating from my Bachelor of Commerce degree at The University of Auckland.</p>
-                    <p class="text-left" id="intro-text">What's this for?  You may ask.  Right now, it's the home of my photos accumulated over time since I saved enough money to buy my DSLR back in first year of university.  Later on, perhaps much more than that, including the timelapse pieces which originally got me into photography.</p>
-                    <p class="text-left" id="intro-text">For now, I'll take it one step at a time.</p>
+                    <p class="text-left" id="intro-text">It's an analogy.  To remind myself that life is too short not to appreciate every second we have; the awkward, the uncertain, the corny and the cheesy moments of life. And with that, an appreciation, a mantra to live by; to be the person you've always wanted to be and aspire to become.</p>
+                    <p class="text-left" id="intro-text">A bit about myself.  I was born and have spent most of my childhood in the Philippines <span class="f32"><span class="flag ph"></span></span>, before our family emigrated to the middle of Middle Earth – Wellington, New Zealand <span class="f32"><span class="flag nz"></span></span>. Having finished high school there, I then moved north to study Bachelor of Commerce at The University of Auckland.</p>
+                    <p class="text-left" id="intro-text">After graduating, I've since moved to Sydney, Australia <span class="f32" style="height: 20px"><span class="flag au"></span></span>to work in technology within a financial services firm – which is where I'm currently at today.</p>
                 </div>
                 <div class="col-lg" style="padding:0; background-color:#000000; text-align: center;overflow:hidden">
                     <img class="img-fluid" src="{{url_for('static', filename='images/intro.jpg')}}">
@@ -74,7 +86,7 @@
         <!-- Footer -->
         <div class="container-fluid" id="footer">
             <div class="container">
-                <p class="text-center" id="footer-text">&copy; 2018 <a href="http://jsnarvasa.com"><span style="color:{{generated_color}}">Jesse S. Narvasa</span></a> | All Rights Reserved</p>
+                <p class="text-center" id="footer-text">&copy; 2018-2019 <a href="http://jsnarvasa.com"><span style="color:{{generated_color}}">Jesse S. Narvasa</span></a> | All Rights Reserved</p>
             </div>
         </div>
 
