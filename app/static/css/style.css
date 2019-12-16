@@ -72,10 +72,12 @@ div#intro-text {
 }
 
 h3#intro-text {
+    visibility: hidden;
     color:#f9f9f9;
 }
 
 p#intro-text {
+    visibility: hidden;
     color:#d6d2d2;
 }
 
