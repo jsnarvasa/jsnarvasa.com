@@ -39,7 +39,7 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + config.database_conn['DEV']['user'] + ':' + config.database_conn['DEV']['password'] + '@' + config.database_conn['DEV']['host'] + '/' + config.database_conn['DEV']['schema'] + '?charset=utf8mb4'
     app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 1800
 
 # Create photos upload directory
 app.config['UPLOAD_FOLDER'] = config.photos['UPLOAD_DIRECTORY']
