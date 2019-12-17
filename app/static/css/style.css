@@ -67,6 +67,12 @@ p.pageHeader {
     visibility:hidden;
 }
 
+#name {
+    display: inline-block;
+    border-bottom: 1px solid #f9f9f9;
+    border-top: 1px solid #f9f9f9;
+}
+
 div#intro-text {
     padding:2em;
 }
@@ -79,11 +85,9 @@ h3#intro-text {
 p#intro-text {
     visibility: hidden;
     color:#d6d2d2;
+    font-size: large;
 }
 
-.f32 .flag {
-    height: 25px !important;
-}
 
 /* Only used gallery.html */
 
