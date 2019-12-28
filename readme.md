@@ -48,7 +48,6 @@ geoJSON boundary data used within the visual scratch map component of PhotoBlog 
 
 
 #### Docker Initialisations
-***
 Handy for scripts:
 sed -i -e 's/\r$//' scriptname.sh
 
