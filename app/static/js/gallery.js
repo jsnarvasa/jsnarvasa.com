@@ -27,7 +27,7 @@ $(document).ready(function() {
     };
 
     $('.card-columns').on('click', 'img.gallery-image', function(){
-        var image = '<img class="img-fluid" id="image-on-overlay" src="static/photos/' + $(this).attr('id') + '"></img>';
+        var image = '<img class="img-fluid" id="image-on-overlay" src="/static/photos/' + $(this).attr('id') + '"></img>';
         $('.overlay-background').css("visibility", "visible").hide().fadeIn(150);
         $('#overlay-container').css("visibility", "visible").hide().fadeIn(150);
         $('#overlay-container').css("top", overlayOffset());
