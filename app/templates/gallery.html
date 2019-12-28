@@ -94,6 +94,7 @@
         function add_geojson_layer(area_boundaries) {
             geojson_layer = L.geoJson(area_boundaries).addTo(mymap);
             geojson_layer.eachLayer(function (layer) {
+                layer.on('click', function() { window.open('/photoblog/area/' + layer.feature.properties.AreaCode, '_self') });
                 layer.setStyle({fillColor: generateRandomColor(), color: '#30D5C8'})
             });
         };

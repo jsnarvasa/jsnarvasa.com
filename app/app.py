@@ -55,6 +55,7 @@ db = SQLAlchemy(app)
 # Models
 from models.Photos import Photos
 from models.Area import Area
+from models.Utilities import Utils
 
 
 ######################################################
@@ -79,27 +80,8 @@ def index():
 @app.route("/photoblog")
 def photoblog():
     image_names = Photos.get_photo_list()
-    
-    # geoJson
-    regions = []
-    areas = []
-    for image in image_names:
-        regions.append(image.Region)
-    for (idx, region) in enumerate(regions):
-        if Area.is_area_exist(region):
-            # Check first, if region boundary data exists
-            areas.append(region)
-        else:
-            # Default to country boundary data
-            areas.append(image_names[idx].Country)
-    boundaries = Area.get_area(areas)
-    geojson = Area.geojson_constructor(boundaries)
-
-    # Mapbox token data
-    if hostname == config.hostname['PROD']:
-        token = config.mapbox['TOKEN']['PROD']
-    else:
-        token = config.mapbox['TOKEN']['DEV']
+    geojson = Utils.get_geojson(image_names)
+    token = Utils.get_mapbox_token(hostname)
     
     return render_template("gallery.html", image_names=image_names, geojson=geojson, token=token)
 
@@ -111,23 +93,18 @@ def photoblog_pageNum(pageNum):
     for image in image_names:
         image_list.append(image.FileName)
 
-    # geoJson
-    regions = []
-    areas = []
-    for image in image_names:
-        regions.append(image.Region)
-    for (idx, region) in enumerate(regions):
-        if Area.is_area_exist(region):
-            # Check first, if region boundary data exists
-            areas.append(region)
-        else:
-            # Default to country boundary data
-            areas.append(image_names[idx].Country)
-    boundaries = Area.get_area(areas)
-    geojson = Area.geojson_constructor(boundaries)
+    geojson = Utils.get_geojson(image_names)
 
     return jsonify(image_names=image_list, geojson=geojson)
 
+
+@app.route('/photoblog/area/<AreaCode>')
+def area(AreaCode):
+    image_names = Photos.search_photo_list(AreaCode)
+    geojson = Utils.get_geojson(image_names)
+    token = Utils.get_mapbox_token(hostname)
+
+    return render_template('gallery.html', image_names=image_names, searchQuery=AreaCode, geojson=geojson, token=token)
 
 @app.route("/getphotodetails")
 def getphotodetails():
@@ -147,26 +124,8 @@ def search():
     searchQuery = request.args.get('q', '')
     image_names = Photos.search_photo_list(searchQuery)
 
-    # geoJson
-    regions = []
-    areas = []
-    for image in image_names:
-        regions.append(image.Region)
-    for (idx, region) in enumerate(regions):
-        if Area.is_area_exist(region):
-            # Check first, if region boundary data exists
-            areas.append(region)
-        else:
-            # Default to country boundary data
-            areas.append(image_names[idx].Country)
-    boundaries = Area.get_area(areas)
-    geojson = Area.geojson_constructor(boundaries)
-
-    # Mapbox token data
-    if hostname == config.hostname['PROD']:
-        token = config.mapbox['TOKEN']['PROD']
-    else:
-        token = config.mapbox['TOKEN']['DEV']
+    geojson = Utils.get_geojson(image_names)
+    token = Utils.get_mapbox_token(hostname)
 
     return render_template('gallery.html', image_names=image_names, searchQuery=searchQuery, geojson=geojson, token=token)
 
@@ -178,7 +137,10 @@ def search_pageNum(pageNum):
     image_list = []
     for image in image_names:
         image_list.append(image.FileName)
-    return jsonify(image_names=image_list)
+
+    geojson = Utils.get_geojson(image_names)
+
+    return jsonify(image_names=image_list, geojson=geojson)
 
 
 @app.route("/upload", methods=['GET', 'POST'])

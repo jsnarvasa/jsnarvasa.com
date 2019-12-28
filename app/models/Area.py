@@ -37,8 +37,7 @@ class Area(db.Model):
                 area_json = {}
                 area_json['type'] = 'Feature'
                 area_json['properties'] = {}
-                # area_json['properties']['ADMIN'] = area.CountryName
-                # area_json['properties']['ISO_A3'] = area.ISO31661a3
+                area_json['properties']['AreaCode'] = area.AreaCode
                 area_json['geometry'] = json.loads(area.Geometry)
                 geojson['features'].append(area_json)
         return geojson
