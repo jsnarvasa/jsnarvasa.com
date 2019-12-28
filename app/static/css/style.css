@@ -31,10 +31,6 @@ body {
     font-size: small;
 }
 
-#orange {
-    color:#FF6600;
-}
-
 .pageHeader{
     margin: 1em 0 0 0;
 }
@@ -67,6 +63,11 @@ p.pageHeader {
     visibility:hidden;
 }
 
+#splash-intro > h4 {
+    font-weight: lighter;
+    line-height: 1.7em;
+}
+
 #name {
     display: inline-block;
     border-bottom: 1px solid #f9f9f9;
@@ -75,6 +76,7 @@ p.pageHeader {
 
 div#intro-text {
     padding:2em;
+    background-color: #061427;
 }
 
 h3#intro-text {
