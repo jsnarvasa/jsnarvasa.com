@@ -3,7 +3,34 @@ jsnarvasa.com
 Author: Jesse S. Narvasa
 Date: 14 October 2019
 
-#### Server Setup
+#### Setup
+***
+1. Create virtualenv
+2. Copy .service file to /etc/systemd/system/ - this allows you to do systemctl calls
+3. Create nginx entry in sites-available directory - this creates the nginx entry for nginx to link to uwsgi
+4. Create link file of nginx entry in sites-enabled directory
+5. Run "sudo systemctl start jsnarvasa.service"
+6. May need to restart nginx "sudo systemctl restart nginx" or just reload
+
+# Inserting Area Boundary static data in MySQL database
+1. Update geo-countries_zip geojson file to be a .py file and create a dictionary variable that countains the whole file
+2. run geojson_sql_constructor.  This will create a boundaries.sql file
+3. Run mysql -f -uroot -p'<password>' CornAndCheese < boundaries.sql to upload boundaries data, while forcing write since some entries may violate unique constraints
+
+
+#### Licenses
+geoJSON boundary data used within the visual scratch map component of PhotoBlog has been acquired through the sources below, where the original data is public domain.
+
+[Natural Earth][naturalearth]
+[Lexman][lexman]
+[Open Knowledge Foundation][okfn]
+
+[naturalearth]: http://www.naturalearthdata.com/
+[lexman]: http://github.com/lexman
+[okfn]: http://okfn.org/
+
+
+#### Legacy
 ***
 1. Login as root
 2. Create new user
@@ -18,7 +45,7 @@ Date: 14 October 2019
 	sudo usermod -aG docker ${USER}
 
 
-#### Docker Initialisations
+# Docker Initialisations
 ***
 Handy for scripts:
 sed -i -e 's/\r$//' scriptname.sh
@@ -45,31 +72,3 @@ git pull origin master
 update database_config.yaml mysql_host value to 'cornandcheesedb'
 docker build -t cornandcheese .
 docker run --name cornandcheese --link cornandcheesedb:mysql -d -p 80:80 -t cornandcheese
-
-##### Redo
-1. Create virtualenv
-2. Copy .service file to /etc/systemd/system/ - this allows you to do systemctl calls
-3. Create nginx entry in sites-available directory - this creates the nginx entry for nginx to link to uwsgi
-4. Create link file of nginx entry in sites-enabled directory
-5. Run "sudo systemctl start jsnarvasa.service"
-6. May need to restart nginx "sudo systemctl restart nginx" or just reload
-
-# Inserting Area Boundary static data in MySQL database
-1. Update geo-countries_zip geojson file to be a .py file and create a dictionary variable that countains the whole file
-2. run geojson_sql_constructor.  This will create a boundaries.sql file
-3. Run mysql -f -uroot -p'<password>' CornAndCheese < boundaries.sql to upload boundaries data, while forcing write since some entries may violate unique constraints
-
-## License
-
-All data is licensed under the [Open Data Commons Public Domain Dedication and License][pddl]. 
-
-Note that the original data from [Natural Earth][naturalearth] is public domain. While no credit is 
-formally required a link back or credit to [Natural Earth][naturalearth], [Lexman][lexman] and the [Open Knowledge Foundation][okfn] is much appreciated.
-
-All source code is licenced under the [MIT licence][mit].
-
-[mit]: https://opensource.org/licenses/MIT
-[naturalearth]: http://www.naturalearthdata.com/
-[pddl]: http://opendatacommons.org/licenses/pddl/1.0/
-[lexman]: http://github.com/lexman
-[okfn]: http://okfn.org/
