@@ -3,7 +3,7 @@ jsnarvasa.com
 Author: Jesse S. Narvasa
 Date: 14 October 2019
 
-#### Setup
+## Setup
 ***
 1. Create virtualenv
 2. Copy .service file to /etc/systemd/system/ - this allows you to do systemctl calls
@@ -12,13 +12,13 @@ Date: 14 October 2019
 5. Run "sudo systemctl start jsnarvasa.service"
 6. May need to restart nginx "sudo systemctl restart nginx" or just reload
 
-# Inserting Area Boundary static data in MySQL database
+#### Inserting Area Boundary static data in MySQL database
 1. Update geo-countries_zip geojson file to be a .py file and create a dictionary variable that countains the whole file
 2. run geojson_sql_constructor.  This will create a boundaries.sql file
 3. Run mysql -f -uroot -p'<password>' CornAndCheese < boundaries.sql to upload boundaries data, while forcing write since some entries may violate unique constraints
 
 
-#### Licenses
+## Licenses
 geoJSON boundary data used within the visual scratch map component of PhotoBlog has been acquired through the sources below, where the original data is public domain.
 
 [Natural Earth][naturalearth]
@@ -30,7 +30,7 @@ geoJSON boundary data used within the visual scratch map component of PhotoBlog 
 [okfn]: http://okfn.org/
 
 
-#### Legacy
+## Legacy
 ***
 1. Login as root
 2. Create new user
@@ -45,7 +45,7 @@ geoJSON boundary data used within the visual scratch map component of PhotoBlog 
 	sudo usermod -aG docker ${USER}
 
 
-# Docker Initialisations
+#### Docker Initialisations
 ***
 Handy for scripts:
 sed -i -e 's/\r$//' scriptname.sh
