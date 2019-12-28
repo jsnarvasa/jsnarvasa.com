@@ -3,8 +3,9 @@ jsnarvasa.com
 Author: Jesse S. Narvasa
 Date: 14 October 2019
 
-## Setup
 ***
+
+## Setup
 1. Create virtualenv
 2. Copy .service file to /etc/systemd/system/ - this allows you to do systemctl calls
 3. Create nginx entry in sites-available directory - this creates the nginx entry for nginx to link to uwsgi
@@ -17,6 +18,7 @@ Date: 14 October 2019
 2. run geojson_sql_constructor.  This will create a boundaries.sql file
 3. Run mysql -f -uroot -p'<password>' CornAndCheese < boundaries.sql to upload boundaries data, while forcing write since some entries may violate unique constraints
 
+***
 
 ## Licenses
 geoJSON boundary data used within the visual scratch map component of PhotoBlog has been acquired through the sources below, where the original data is public domain.
@@ -29,9 +31,9 @@ geoJSON boundary data used within the visual scratch map component of PhotoBlog 
 [lexman]: http://github.com/lexman
 [okfn]: http://okfn.org/
 
+***
 
 ## Legacy
-***
 1. Login as root
 2. Create new user
 3. Assign new user sudo group
