@@ -100,6 +100,7 @@ class Photos(db.Model):
 
     @staticmethod
     def reverse_geocode(coordinates):
+        country, region = None, None
         url = config.mapbox['REVERSE_GEOCODING'] + str(coordinates[1]) + ',' + str(coordinates[0]) + '.json'
         if host == 'PROD':
             parameters = {'access_token' : config.mapbox['TOKEN']['PROD']}
