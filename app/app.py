@@ -145,6 +145,30 @@ def area(AreaCode):
 
     return render_template('gallery.html', image_names=image_names, searchQuery=AreaCode, geojson=geojson, token=token, date_range=date_range, start_date=start_date, end_date=end_date)
 
+
+@app.route('/photoblog/area/<AreaCode>/<pageNum>')
+def areaCode_pageNum(AreaCode, pageNum):
+    AreaCode = request.args.get('q', '')
+
+    # To accommodate for timeline start and end date request
+    parsed = urlparse.urlparse(request.referrer)
+    start_date, end_date = None, None
+    try:
+        start_date = parse_qs(parsed.query)['start']
+        end_date = parse_qs(parsed.query)['end']
+    except Exception:
+        pass
+
+    if start_date is not None and end_date is not None:
+        image_names = Photos.filter_photo_area(AreaCode, pageNum, start_date=start_date, end_date=end_date)
+    else:
+        image_names = Photos.filter_photo_area(AreaCode, pageNum)
+
+    image_list = [image.FileName for image in image_names]
+    geojson = Utils.get_geojson(image_names)
+
+    return jsonify(image_names=image_list, geojson=geojson)
+
 @app.route("/getphotodetails")
 def getphotodetails():
     filename = request.args.get('img', 'Error', type=str)
@@ -161,22 +185,46 @@ def getphotodetails():
 @app.route("/search", methods=["GET"])
 def search():
     searchQuery = request.args.get('q', '')
-    image_names = Photos.search_photo_list(searchQuery)
+
+    date_range = {}
+    date_range['min'] = Photos.get_time('min')
+    date_range['max'] = Photos.get_time('max')
+
+    # To accommodate for timeline start and end date request
+    start_date = request.args.get('start')
+    end_date = request.args.get('end')
+
+    if start_date is not None and end_date is not None:
+        image_names = Photos.search_photo_list(searchQuery, start_date=start_date, end_date=end_date)
+    else:
+        image_names = Photos.search_photo_list(searchQuery)
+        start_date, end_date = None, None
 
     geojson = Utils.get_geojson(image_names)
     token = Utils.get_mapbox_token(hostname)
 
-    return render_template('gallery.html', image_names=image_names, searchQuery=searchQuery, geojson=geojson, token=token)
+    return render_template('gallery.html', image_names=image_names, searchQuery=searchQuery, geojson=geojson, token=token, date_range=date_range, start_date=start_date, end_date=end_date)
 
 
 @app.route("/search/<pageNum>", methods=["GET"])
 def search_pageNum(pageNum):
     searchQuery = request.args.get('q','')
-    image_names = Photos.search_photo_list(searchQuery, pageNum, 9)
-    image_list = []
-    for image in image_names:
-        image_list.append(image.FileName)
 
+    # To accommodate for timeline start and end date request
+    parsed = urlparse.urlparse(request.referrer)
+    start_date, end_date = None, None
+    try:
+        start_date = parse_qs(parsed.query)['start']
+        end_date = parse_qs(parsed.query)['end']
+    except Exception:
+        pass
+
+    if start_date is not None and end_date is not None:
+        image_names = Photos.search_photo_list(searchQuery, pageNum, start_date=start_date, end_date=end_date)
+    else:
+        image_names = Photos.search_photo_list(searchQuery, pageNum)
+
+    image_list = [image.FileName for image in image_names]
     geojson = Utils.get_geojson(image_names)
 
     return jsonify(image_names=image_list, geojson=geojson)

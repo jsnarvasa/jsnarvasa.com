@@ -69,8 +69,10 @@ $(document).ready(function() {
 
     var url = window.location.pathname; //determine if traffic is from photoblog or search
     var page = '';
+    searchQuery = $('#searchQuery').text()
+
     if(url.substr(1,14)=='photoblog/area'){
-        page = 'search';
+        page = 'photoblog/area/' + searchQuery;
     }
     else if(url.substr(1,9)=='photoblog'){
         page = 'photoblog'
@@ -78,8 +80,6 @@ $(document).ready(function() {
     else{
         page = 'search'
     };
-
-    searchQuery = $('#searchQuery').text()
 
     // Checks if there are more photos in the next pagination batch.  If next page contains 0 images, then hide load more button
     function isMoreContent(pageNum){

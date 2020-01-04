@@ -49,9 +49,9 @@ class Photos(db.Model):
         # Output - Returns multiple Photos objects, function is similar to search_photo_list, except focused on countries and regions only
         currentPage = int(currentPage)
         if start_date is not None and end_date is not None:
-            return cls.query.filter(Photos.Capture_Date.between(start_date, end_date), (Photos.Country.like('%' + searchQuery + '%')) | (Photos.Region.like('%' + searchQuery + '%'))).order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
+            return cls.query.filter(Photos.Capture_Date.between(start_date, end_date), (Photos.Country == searchQuery) | (Photos.Region == searchQuery)).order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
         else:
-            return cls.query.filter((Photos.Country.like('%' + searchQuery + '%')) | (Photos.Region.like('%' + searchQuery + '%'))).order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
+            return cls.query.filter((Photos.Country == searchQuery) | (Photos.Region == searchQuery)).order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
 
     @classmethod
     def search_photo_filename(cls, filename):
