@@ -6,6 +6,8 @@ from random import randint
 from datetime import datetime
 from sqlalchemy import exc
 from PIL import Image
+import urllib.parse as urlparse
+from urllib.parse import parse_qs
 import os
 import socket
 import config
@@ -103,8 +105,9 @@ def photoblog():
 def photoblog_pageNum(pageNum):
     
     # To accommodate for timeline start and end date request
-    start_date = request.args.get('start')
-    end_date = request.args.get('end')
+    parsed = urlparse.urlparse(request.referrer)
+    start_date = parse_qs(parsed.query)['start']
+    end_date = parse_qs(parsed.query)['end']
 
     if start_date is not None and end_date is not None:
         image_names = Photos.get_photo_list(pageNum, start_date=start_date, end_date=end_date)
