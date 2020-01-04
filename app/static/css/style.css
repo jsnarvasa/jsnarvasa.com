@@ -154,6 +154,15 @@ p#intro-text {
     background-color:transparent;
 }
 
+#dateRangeText {
+    border: 0;
+    font-weight: bold;
+    text-align:center;
+    width:100%;
+    margin-top:0.75em;
+    background-color: inherit;
+}
+
 .ui-slider-horizontal {
     height: 1.25em !important;
 }

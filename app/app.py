@@ -91,6 +91,7 @@ def photoblog():
         image_names = Photos.get_photo_list(start_date=start_date, end_date=end_date)
     else:
         image_names = Photos.get_photo_list()
+        start_date, end_date = None, None
     
     geojson = Utils.get_geojson(image_names)
     token = Utils.get_mapbox_token(hostname)
