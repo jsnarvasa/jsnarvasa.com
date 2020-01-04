@@ -67,10 +67,13 @@ $(document).ready(function() {
     pageCount = 1
     var recentScroll = false;
 
-    var url = window.location.href; //because it can be from photoblog or search
+    var url = window.location.pathname; //determine if traffic is from photoblog or search
     var page = '';
-    if(url.substr(url.length-9)=='photoblog'){
-        page = 'photoblog';
+    if(url.substr(1,14)=='photoblog/area'){
+        page = 'search';
+    }
+    else if(url.substr(1,9)=='photoblog'){
+        page = 'photoblog'
     }
     else{
         page = 'search'
