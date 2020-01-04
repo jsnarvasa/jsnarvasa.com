@@ -126,11 +126,24 @@ def photoblog_pageNum(pageNum):
 
 @app.route('/photoblog/area/<AreaCode>')
 def area(AreaCode):
-    image_names = Photos.search_photo_list(AreaCode)
+    date_range = {}
+    date_range['min'] = Photos.get_time('min')
+    date_range['max'] = Photos.get_time('max')
+
+    # To accommodate for timeline start and end date request
+    start_date = request.args.get('start')
+    end_date = request.args.get('end')
+
+    if start_date is not None and end_date is not None:
+        image_names = Photos.search_photo_list(AreaCode, start_date=start_date, end_date=end_date)
+    else:
+        image_names = Photos.search_photo_list(AreaCode)
+        start_date, end_date = None, None
+
     geojson = Utils.get_geojson(image_names)
     token = Utils.get_mapbox_token(hostname)
 
-    return render_template('gallery.html', image_names=image_names, searchQuery=AreaCode, geojson=geojson, token=token)
+    return render_template('gallery.html', image_names=image_names, searchQuery=AreaCode, geojson=geojson, token=token, date_range=date_range, start_date=start_date, end_date=end_date)
 
 @app.route("/getphotodetails")
 def getphotodetails():

@@ -36,10 +36,13 @@ class Photos(db.Model):
             return cls.query.filter(Photos.Capture_Date.between(start_date, end_date)).order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
 
     @classmethod
-    def search_photo_list(cls, searchQuery, currentPage=1, perPage=9):
+    def search_photo_list(cls, searchQuery, currentPage=1, perPage=9, start_date=None, end_date=None):
         # Output - Returns multiple Photos objects, where geography matches the searchQuery
         currentPage = int(currentPage)
-        return cls.query.filter((Photos.Country.like('%' + searchQuery + '%')) | (Photos.City.like('%' + searchQuery + '%')) | (Photos.Place.like('%' + searchQuery + '%'))).order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
+        if start_date is None and end_date is None:
+            return cls.query.filter((Photos.Country.like('%' + searchQuery + '%')) | (Photos.City.like('%' + searchQuery + '%')) | (Photos.Place.like('%' + searchQuery + '%'))).order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
+        else:
+            return cls.query.filter(Photos.Capture_Date.between(start_date, end_date), (Photos.Country.like('%' + searchQuery + '%')) | (Photos.City.like('%' + searchQuery + '%')) | (Photos.Place.like('%' + searchQuery + '%'))).order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
         
     @classmethod
     def search_photo_filename(cls, filename):
