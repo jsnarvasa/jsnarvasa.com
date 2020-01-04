@@ -27,10 +27,13 @@ class Photos(db.Model):
 
 
     @classmethod
-    def get_photo_list(cls, currentPage=1, perPage=9):
+    def get_photo_list(cls, currentPage=1, perPage=9, start_date=None, end_date=None):
         # Output - Returns LIST of Photos objects
         currentPage = int(currentPage)
-        return cls.query.order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
+        if start_date is None and end_date is None:
+            return cls.query.order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
+        else:
+            return cls.query.filter(Photos.Capture_Date.between(start_date, end_date)).order_by(Photos.Capture_Date.desc()).paginate(page=currentPage, per_page=perPage, error_out=False).items
 
     @classmethod
     def search_photo_list(cls, searchQuery, currentPage=1, perPage=9):
@@ -42,6 +45,17 @@ class Photos(db.Model):
     def search_photo_filename(cls, filename):
         # Output - Returns single Photos object, that matches filename
         return cls.query.filter_by(FileName=filename).first()
+
+    @classmethod
+    def get_time(cls, operation=None):
+        if operation == 'min':
+            min = db.session.query(db.func.min(Photos.Capture_Date)).first()
+            return min[0]
+        elif operation == 'max':
+            max = db.session.query(db.func.max(Photos.Capture_Date)).first()
+            return max[0]
+        else:
+            return None
 
     @staticmethod
     def check_allowed_filetype(filename):

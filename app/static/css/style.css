@@ -153,3 +153,11 @@ p#intro-text {
 #loadMoreButton:hover{
     background-color:transparent;
 }
+
+.ui-slider-horizontal {
+    height: 1.25em !important;
+}
+
+.ui-slider .ui-slider-handle{
+    height:1.75em !important;
+}

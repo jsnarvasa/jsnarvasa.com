@@ -6,12 +6,11 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin=""/>
-   <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
         integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
         crossorigin=""></script>
-    <style>
-        #mapid {height: 500px;}
-    </style>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
 
 {% endblock %}
 
@@ -21,7 +20,15 @@
     <p class="pageHeader"></p>
     <hr/>
 
-    <div id="mapid"></div>
+    <div id="mapid" style="height:500px"></div>
+    
+    <input type="text" id="amount" style="border: 0; color: {{ generated_color }}; font-weight: bold; text-align:center; width:100%; margin-top:0.75em; background-color: inherit;" size="100"/>
+    <div id="slider-range"></div>
+
+    <form method="GET" id="timeRange">
+        <input type="hidden" id="start_date" name="start">
+        <input type="hidden" id="end_date" name="end">
+    </form>
 
     <div class="card-columns" style="margin-top:1em;">
         {% for image_name in image_names %}
@@ -53,6 +60,7 @@
 {% endblock %}
 
 {% block jslibrary %}
+    
     <script>
         // Color generator
         function generateRandomColor(){
@@ -104,7 +112,43 @@
         };
 
     </script>
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     
+    <script>
+        $(document).ready(function() {
+
+            {% if start_date is none  and end_date is none%}
+                var start_date = new Date('{{ date_range['min'] }}').getTime()
+                var end_date = new Date('{{ date_range['max'] }}').getTime()
+            {% else %}
+                var start_date = new Date('{{ start_date }}').getTime()
+                var end_date = new Date('{{ end_date }}').getTime()
+            {% endif %}
+
+            $( "#slider-range" ).slider({
+                range: true,
+                min: new Date('{{ date_range['min'] }}').getTime() /1000,
+                max: new Date('{{ date_range['max'] }}').getTime() /1000,
+                step: 86400,
+                values: [ start_date/1000, end_date/1000 ],
+                slide: function( event, ui ) {
+                    $('#amount').val( (new Date(ui.values[ 0 ] *1000).toDateString() ) + " - " + (new Date(ui.values[ 1 ] *1000)).toDateString() );
+                    $('#start_date').val(new Date(ui.values[ 0 ] *1000).toISOString().substring(0,10));
+                    $('#end_date').val(new Date(ui.values[ 1 ] *1000).toISOString().substring(0,10));
+                },
+                stop: function( event, ui) {
+                    $('#timeRange').submit()
+                }
+            });
+
+            $('#amount').val( new Date(start_date).toDateString() + " - " + new Date(end_date).toDateString());
+            $('#start_date').val(new Date($('#slider-range').slider("values", 0)*1000).toISOString().substring(0,10))
+            $('#end_date').val(new Date($('#slider-range').slider("values", 1)*1000).toISOString().substring(0,10))
+
+        });
+    </script>
+
     <!-- Special javascript for gallery.html -->
     <script src="{{ url_for('static',filename='js/gallery.js') }}"></script>
 

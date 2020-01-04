@@ -79,20 +79,38 @@ def index():
 
 @app.route("/photoblog")
 def photoblog():
-    image_names = Photos.get_photo_list()
+    date_range = {}
+    date_range['min'] = Photos.get_time('min')
+    date_range['max'] = Photos.get_time('max')
+
+    # To accommodate for timeline start and end date request
+    start_date = request.args.get('start')
+    end_date = request.args.get('end')
+
+    if start_date is not None and end_date is not None:
+        image_names = Photos.get_photo_list(start_date=start_date, end_date=end_date)
+    else:
+        image_names = Photos.get_photo_list()
+    
     geojson = Utils.get_geojson(image_names)
     token = Utils.get_mapbox_token(hostname)
-    
-    return render_template("gallery.html", image_names=image_names, geojson=geojson, token=token)
+
+    return render_template("gallery.html", image_names=image_names, geojson=geojson, token=token, date_range=date_range, start_date=start_date, end_date=end_date)
 
 
 @app.route("/photoblog/<pageNum>")
 def photoblog_pageNum(pageNum):
-    image_names = Photos.get_photo_list(pageNum)
-    image_list = []
-    for image in image_names:
-        image_list.append(image.FileName)
+    
+    # To accommodate for timeline start and end date request
+    start_date = request.args.get('start')
+    end_date = request.args.get('end')
 
+    if start_date is not None and end_date is not None:
+        image_names = Photos.get_photo_list(pageNum, start_date=start_date, end_date=end_date)
+    else:
+        image_names = Photos.get_photo_list(pageNum)
+
+    image_list = [image.FileName for image in image_names]
     geojson = Utils.get_geojson(image_names)
 
     return jsonify(image_names=image_list, geojson=geojson)
