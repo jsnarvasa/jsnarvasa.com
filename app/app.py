@@ -135,9 +135,9 @@ def area(AreaCode):
     end_date = request.args.get('end')
 
     if start_date is not None and end_date is not None:
-        image_names = Photos.search_photo_list(AreaCode, start_date=start_date, end_date=end_date)
+        image_names = Photos.filter_photo_area(AreaCode, start_date=start_date, end_date=end_date)
     else:
-        image_names = Photos.search_photo_list(AreaCode)
+        image_names = Photos.filter_photo_area(AreaCode)
         start_date, end_date = None, None
 
     geojson = Utils.get_geojson(image_names)
