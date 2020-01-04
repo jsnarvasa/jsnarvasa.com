@@ -106,8 +106,12 @@ def photoblog_pageNum(pageNum):
     
     # To accommodate for timeline start and end date request
     parsed = urlparse.urlparse(request.referrer)
-    start_date = parse_qs(parsed.query)['start']
-    end_date = parse_qs(parsed.query)['end']
+    start_date, end_date = None, None
+    try:
+        start_date = parse_qs(parsed.query)['start']
+        end_date = parse_qs(parsed.query)['end']
+    except Exception:
+        pass
 
     if start_date is not None and end_date is not None:
         image_names = Photos.get_photo_list(pageNum, start_date=start_date, end_date=end_date)
