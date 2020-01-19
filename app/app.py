@@ -36,9 +36,9 @@ logging.basicConfig(filename=log_file_path, level=logging.INFO)
 ######################################################
 app = Flask(__name__)
 if hostname == config.hostname['PROD']:
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + config.database_conn['PROD']['user'] + ':' + config.database_conn['PROD']['password'] + '@' + config.database_conn['PROD']['host'] + '/' + config.database_conn['PROD']['schema'] + '?charset=utf8mb4'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{config.database_conn['PROD']['user']}:{config.database_conn['PROD']['password']}@{config.database_conn['PROD']['host']}/{config.database_conn['PROD']['schema']}?charset=utf8mb4"
 else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + config.database_conn['DEV']['user'] + ':' + config.database_conn['DEV']['password'] + '@' + config.database_conn['DEV']['host'] + '/' + config.database_conn['DEV']['schema'] + '?charset=utf8mb4'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{config.database_conn['DEV']['user']}:{config.database_conn['DEV']['password']}@{config.database_conn['DEV']['host']}/{config.database_conn['DEV']['schema']}?charset=utf8mb4"
     app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 1800
@@ -168,6 +168,7 @@ def areaCode_pageNum(AreaCode, pageNum):
     geojson = Utils.get_geojson(image_names)
 
     return jsonify(image_names=image_list, geojson=geojson)
+
 
 @app.route("/getphotodetails")
 def getphotodetails():
@@ -308,7 +309,7 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
-        if request.form['username'] == 'jsnarvasa' and request.form['password'] == 'test':
+        if request.form['username'] == 'jsnarvasa' and request.form['password'] == 'testing2020':
             session['username'] = request.form['username']
             return redirect(url_for('upload'))
         else:

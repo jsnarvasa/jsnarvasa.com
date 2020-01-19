@@ -15,7 +15,7 @@ for area in areas:
     geometry = str(area['geometry'])
     geometry = geometry.replace("'","\"")
     areacode = str(match_areacode(areaname))
-    area_sql = "INSERT IGNORE INTO Area VALUES (\'" + areacode + "\', \'" + areatype + "\', \'" + areaname + "\', \'" + geometry + "\')"
+    area_sql = f"INSERT IGNORE INTO Area VALUES ('{areacode}', '{areatype}', '{areaname}', '{geometry}')"
     sql_text.append(area_sql)
 
 sql_text = ";".join(str(sql) for sql in sql_text)
