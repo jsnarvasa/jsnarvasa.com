@@ -6,8 +6,6 @@ from random import randint
 from datetime import datetime
 from sqlalchemy import exc
 from PIL import Image
-import urllib.parse as urlparse
-from urllib.parse import parse_qs
 import os
 import socket
 import config
@@ -105,14 +103,11 @@ def photoblog():
 @app.route("/photoblog/<pageNum>")
 def photoblog_pageNum(pageNum):
     
-    # To accommodate for timeline start and end date request
-    parsed = urlparse.urlparse(request.referrer)
-    start_date, end_date = None, None
     try:
-        start_date = parse_qs(parsed.query)['start']
-        end_date = parse_qs(parsed.query)['end']
-    except Exception:
-        pass
+        start_date, end_date = Utils.get_start_end_date_params(is_feed=True)
+    except ValueError:
+        flash("Invalid date range has been entered", "error")
+        return redirect(url_for('photoblog'))
 
     if start_date is not None and end_date is not None:
         image_names = Photos.get_photo_list(pageNum, start_date=start_date, end_date=end_date)
@@ -150,16 +145,12 @@ def area(AreaCode):
 
 @app.route('/photoblog/area/<AreaCode>/<pageNum>')
 def areaCode_pageNum(AreaCode, pageNum):
-    AreaCode = request.args.get('q', '')
 
-    # To accommodate for timeline start and end date request
-    parsed = urlparse.urlparse(request.referrer)
-    start_date, end_date = None, None
     try:
-        start_date = parse_qs(parsed.query)['start']
-        end_date = parse_qs(parsed.query)['end']
-    except Exception:
-        pass
+        start_date, end_date = Utils.get_start_end_date_params(is_feed=True)
+    except ValueError:
+        flash("Invalid date range has been entered", "error")
+        return redirect(url_for('areaCode', AreaCode=AreaCode))
 
     if start_date is not None and end_date is not None:
         image_names = Photos.filter_photo_area(AreaCode, pageNum, start_date=start_date, end_date=end_date)
@@ -214,14 +205,11 @@ def search():
 def search_pageNum(pageNum):
     searchQuery = request.args.get('q','')
 
-    # To accommodate for timeline start and end date request
-    parsed = urlparse.urlparse(request.referrer)
-    start_date, end_date = None, None
     try:
-        start_date = parse_qs(parsed.query)['start']
-        end_date = parse_qs(parsed.query)['end']
-    except Exception:
-        pass
+        start_date, end_date = Utils.get_start_end_date_params(is_feed=True)
+    except ValueError:
+        flash("Invalid date range has been entered", "error")
+        return redirect(url_for('search', q=searchQuery))
 
     if start_date is not None and end_date is not None:
         image_names = Photos.search_photo_list(searchQuery, pageNum, start_date=start_date, end_date=end_date)

@@ -39,6 +39,11 @@ p.pageHeader {
     font-weight: lighter;
 }
 
+div.error {
+    background-color: #ff9eb2;
+    padding: 0.5em;
+    color: #690000;
+}
 /* Only used index.html */
 #splash-image-div{
     min-height:60vh;

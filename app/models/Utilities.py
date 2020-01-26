@@ -1,5 +1,7 @@
 from datetime import datetime
 from flask import request
+import urllib.parse as urlparse
+from urllib.parse import parse_qs
 from models.Area import Area
 import config
 
@@ -34,10 +36,20 @@ class Utils():
 
 
     @staticmethod
-    def get_start_end_date_params():
+    def get_start_end_date_params(is_feed=False):
         # To accommodate for timeline start and end date request
-        start_date = request.args.get('start')
-        end_date = request.args.get('end')
+
+        if is_feed:
+            parsed = urlparse.urlparse(request.referrer)
+            start_date = parse_qs(parsed.query).get('start')
+            end_date = parse_qs(parsed.query).get('end')
+            try:
+                start_date, end_date = start_date[0], end_date[0]
+            except TypeError:
+                pass
+        else:
+            start_date = request.args.get('start')
+            end_date = request.args.get('end')
 
         if start_date is not None and end_date is not None:
             try:
