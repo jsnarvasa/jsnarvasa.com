@@ -44,6 +44,12 @@ div.error {
     padding: 0.5em;
     color: #690000;
 }
+
+div.success {
+    background-color: #afd2af;
+    padding: 0.5em;
+    color: #005000;
+}
 /* Only used index.html */
 #splash-image-div{
     min-height:60vh;

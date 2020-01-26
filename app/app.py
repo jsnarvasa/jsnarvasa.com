@@ -284,7 +284,7 @@ def upload():
                 width, height = Photos.get_photo_dimensions(os.path.join(photo_upload_dir_path, hashed_filename))
                 Photos.generate_thumbnail(os.path.join(photo_upload_dir_path, hashed_filename), width, height)
                 db.session.commit()
-                flash("Photo upload successful")
+                flash("Photo upload successful", "success")
                 return redirect(url_for('upload'))
 
         else:
