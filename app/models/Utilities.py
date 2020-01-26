@@ -1,3 +1,5 @@
+from datetime import datetime
+from flask import request
 from models.Area import Area
 import config
 
@@ -29,3 +31,21 @@ class Utils():
         else:
             token = config.mapbox['TOKEN']['DEV']        
         return token
+
+
+    @staticmethod
+    def get_start_end_date_params():
+        # To accommodate for timeline start and end date request
+        start_date = request.args.get('start')
+        end_date = request.args.get('end')
+
+        if start_date is not None and end_date is not None:
+            try:
+                datetime.strptime(start_date, '%Y-%m-%d')
+                datetime.strptime(end_date, '%Y-%m-%d')
+            except ValueError:
+                raise ValueError("Expected date format is 'YYYY-MM-DD'")
+        else:
+            start_date, end_date = None, None
+
+        return (start_date, end_date)

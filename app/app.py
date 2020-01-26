@@ -85,15 +85,16 @@ def photoblog():
     date_range['min'] = Photos.get_time('min')
     date_range['max'] = Photos.get_time('max')
 
-    # To accommodate for timeline start and end date request
-    start_date = request.args.get('start')
-    end_date = request.args.get('end')
+    try:
+        start_date, end_date = Utils.get_start_end_date_params()
+    except ValueError:
+        flash("Invalid date range has been entered", "error")
+        return redirect(url_for('photoblog'))
 
     if start_date is not None and end_date is not None:
         image_names = Photos.get_photo_list(start_date=start_date, end_date=end_date)
     else:
         image_names = Photos.get_photo_list()
-        start_date, end_date = None, None
     
     geojson = Utils.get_geojson(image_names)
     token = Utils.get_mapbox_token(hostname)
@@ -130,15 +131,16 @@ def area(AreaCode):
     date_range['min'] = Photos.get_time('min')
     date_range['max'] = Photos.get_time('max')
 
-    # To accommodate for timeline start and end date request
-    start_date = request.args.get('start')
-    end_date = request.args.get('end')
+    try:
+        start_date, end_date = Utils.get_start_end_date_params()
+    except ValueError:
+        flash("Invalid date range has been entered", "error")
+        return redirect(url_for('area', AreaCode=AreaCode))
 
     if start_date is not None and end_date is not None:
         image_names = Photos.filter_photo_area(AreaCode, start_date=start_date, end_date=end_date)
     else:
         image_names = Photos.filter_photo_area(AreaCode)
-        start_date, end_date = None, None
 
     geojson = Utils.get_geojson(image_names)
     token = Utils.get_mapbox_token(hostname)
@@ -191,15 +193,16 @@ def search():
     date_range['min'] = Photos.get_time('min')
     date_range['max'] = Photos.get_time('max')
 
-    # To accommodate for timeline start and end date request
-    start_date = request.args.get('start')
-    end_date = request.args.get('end')
+    try:
+        start_date, end_date = Utils.get_start_end_date_params()
+    except ValueError:
+        flash("Invalid date range has been entered", "error")
+        return redirect(url_for('search', q=searchQuery))
 
     if start_date is not None and end_date is not None:
         image_names = Photos.search_photo_list(searchQuery, start_date=start_date, end_date=end_date)
     else:
         image_names = Photos.search_photo_list(searchQuery)
-        start_date, end_date = None, None
 
     geojson = Utils.get_geojson(image_names)
     token = Utils.get_mapbox_token(hostname)
