@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, jsonify, request, flash, session
+from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
 from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
@@ -33,6 +34,8 @@ logging.basicConfig(filename=log_file_path, level=logging.INFO)
 # Initialise Flask and SQLAlchemy classes
 ######################################################
 app = Flask(__name__)
+flask_bcrypt = Bcrypt(app)
+
 if hostname == config.hostname['PROD']:
     app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{config.database_conn['PROD']['user']}:{config.database_conn['PROD']['password']}@{config.database_conn['PROD']['host']}/{config.database_conn['PROD']['schema']}?charset=utf8mb4"
 else:
@@ -56,6 +59,7 @@ db = SQLAlchemy(app)
 from models.Photos import Photos
 from models.Area import Area
 from models.Utilities import Utils
+from models.Users import Users
 
 
 ######################################################
@@ -300,7 +304,15 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
-        if request.form['username'] == 'jsnarvasa' and request.form['password'] == 'testing2020':
+        # Validation check for username
+        try:
+            pwd_hash = Users.get_password_hash(request.form['username'])
+        except:
+            flash(f"Unable to find username {request.form['username']}", "error")
+            return redirect(request.referrer)
+
+        # Checking entered password, against password for corresponding username in database
+        if flask_bcrypt.check_password_hash(pwd_hash, request.form['password']):
             session['username'] = request.form['username']
             return redirect(url_for('upload'))
         else:
