@@ -56,10 +56,10 @@ app.secret_key = os.urandom(128)
 db = SQLAlchemy(app)
 
 # Models
-from models.Photos import Photos
-from models.Area import Area
-from models.Utilities import Utils
-from models.Users import Users
+from modules.Photos import Photos
+from modules.Area import Area
+from modules.Utilities import Utils
+from modules.Users import Users
 
 
 ######################################################

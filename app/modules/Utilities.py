@@ -2,24 +2,15 @@ from datetime import datetime
 from flask import request
 import urllib.parse as urlparse
 from urllib.parse import parse_qs
-from models.Area import Area
+from modules.Area import Area
 import config
 
 class Utils():
 
     @staticmethod
     def get_geojson(image_names):
-        regions = []
-        areas = []
-        for image in image_names:
-            regions.append(image.Region)
-        for (idx, region) in enumerate(regions):
-            if Area.is_area_exist(region):
-                # Check first, if region boundary data exists
-                areas.append(region)
-            else:
-                # Default to country boundary data
-                areas.append(image_names[idx].Country)
+        """Aggregates the list of areas to be added to the geoJSON object, based on the list of image names provided"""
+        areas = [image.Region if Area.is_area_exist(image.Region) else image.Country for image in image_names]
         boundaries = Area.get_area(areas)
         geojson = Area.geojson_constructor(boundaries)
 
@@ -37,7 +28,7 @@ class Utils():
 
     @staticmethod
     def get_start_end_date_params(is_feed=False):
-        # To accommodate for timeline start and end date request
+        """To accommodate for timeline start and end date request"""
 
         if is_feed:
             parsed = urlparse.urlparse(request.referrer)
