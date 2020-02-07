@@ -314,7 +314,10 @@ def login():
         # Checking entered password, against password for corresponding username in database
         if flask_bcrypt.check_password_hash(pwd_hash, request.form['password']):
             session['username'] = request.form['username']
-            return redirect(url_for('upload'))
+            
+            if request.form.get('redirect_url'):
+                return redirect(request.form.get('redirect_url'))
+            return redirect(url_for('admin'))
         else:
             return redirect(url_for('login'))
 
@@ -324,6 +327,64 @@ def logout():
     # remove username from the session
     session.pop('username', None)
     return redirect(url_for('index'))
+
+
+@app.route('/admin')
+@login_required
+def admin():
+    all_photos = db.session.query(Photos).all()
+    return render_template('admin.html', photos=all_photos)
+
+
+@app.route('/admin/edit/<id>', methods=['GET', 'POST'])
+@login_required
+def admin_edit(id):
+    if request.method == 'GET':
+        photo_details = db.session.query(Photos).filter(Photos.PhotoID==id).first()
+        return render_template('edit.html', photo=photo_details)
+    elif request.method == 'POST':
+        try:
+            db.session.query(Photos).filter(Photos.PhotoID==id).update(dict(
+                Caption=request.form.get('caption'),
+                Capture_Date=request.form.get('capture_date'),
+                Place=request.form.get('place'),
+                City=request.form.get('city')
+            ))
+        except Exception:
+            db.session.rollback()
+            flash("Update failed", category="error")
+            return redirect(url_for(request.url))
+        else:
+            db.session.commit()
+            flash("Update successful", category="success")
+            return redirect(url_for('admin'))
+
+
+@app.route('/admin/delete/<id>')
+@login_required
+def admin_delete(id):
+    photo = db.session.query(Photos).filter(Photos.PhotoID==id).first()
+    if not photo:
+        flash(f"Unable to find photo with ID {id} in the database.  No delete was executed", category="error")
+        return redirect(url_for('admin'))
+    else:
+        try:
+            os.remove(os.path.join(photo_upload_dir_path, photo.FileName))
+            os.remove(os.path.join(photo_upload_dir_path, config.photos['THUMBNAIL_DIRECTORY'], photo.FileName))
+        except Exception:
+            flash(f"Unable to delete photo with filename {photo.FileName} from the server", category="error")
+            pass
+
+        try:
+            db.session.delete(photo)
+        except Exception:
+            db.session.rollback()
+            flash(f"Unable to delete photo {photo.FileName} from the database", category="error")
+        else:
+            db.session.commit()
+            flash(f"Successfully deleted photo {photo.FileName} from the server and the database", category="success")
+        
+        return redirect(url_for('admin'))
 
 
 @app.route('/sitemap')

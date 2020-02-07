@@ -1,0 +1,36 @@
+{% extends 'template.html' %}
+
+{% block title %}Upload New File{% endblock %}
+
+{% block body %}
+
+    <h3>Admin</h3>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Image</th>
+                <th scope="col">Caption</th>
+                <th scope="col">Capture Date</th>
+                <th scope="col">Region</th>
+                <th scope="col">Country</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for photo in photos %}
+            <tr>
+                <td>{{ photo.PhotoID }}</td>
+                <td><img src="{{ url_for('static', filename='photos/thumbnail/' + photo.FileName) }}" class="image-fluid" style="height:5em"></td>
+                <td>{{ photo.Caption }}</td>
+                <td>{{ photo.Capture_Date }}</td>
+                <td>{{ photo.Region }}</td>
+                <td>{{ photo.Country }}</td>
+                <td><a href="{{ url_for('admin_edit', id=photo.PhotoID) }}">Edit</a> | <a href="{{ url_for('admin_delete', id=photo.PhotoID) }}">Delete</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

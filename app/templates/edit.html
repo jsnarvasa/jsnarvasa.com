@@ -1,0 +1,58 @@
+{% extends 'template.html' %}
+
+{% block title %}Upload New File{% endblock %}
+
+{% block body %}
+
+    <h3>Edit Photo Details</h3>
+
+    <img src="{{ url_for('static', filename='photos/thumbnail/' + photo.FileName) }}" class="image-fluid" style="display:block; margin:auto; padding: 1em">
+    <table class="table table-striped">
+        <thead>
+            <th scope="col">Key</th>
+            <th scope="col">Value</th>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">ID</th>
+                <td>{{ photo.PhotoID }}</td>
+            </tr>
+            <tr>
+                <th scope="row">FileName</th>
+                <td>{{ photo.FileName }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Upload Date</th>
+                <td>{{ photo.Upload_Date }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Region</th>
+                <td>{{ photo.Region }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Country</th>
+                <td>{{ photo.Country }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <form method=post enctype=multipart/form-data>
+        <div class="form-group">
+            <label for="caption">Caption</label>
+            <textarea type="text" name="caption" id="caption" class="form-control" >{{ photo.Caption }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="capture_date">Date Taken</label>
+            <input type="date" name="capture_date" id="capture_date" class="form-control" value="{{ photo.Capture_Date }}">
+        </div>
+        <div class="form-group">
+            <label for="place">Place</label>
+            <input type="text" name="place" id="place" class="form-control" value="{{ photo.Place }}">
+        </div>
+        <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" name="city" id="city" class="form-control" value="{{ photo.City }}">
+        </div>
+        <button type=submit class="btn btn-primary" value=Update>Update</button>
+    </form>
+
+{% endblock %}
