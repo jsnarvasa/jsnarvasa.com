@@ -341,7 +341,12 @@ def admin():
 def admin_edit(id):
     if request.method == 'GET':
         photo_details = db.session.query(Photos).filter(Photos.PhotoID==id).first()
-        return render_template('edit.html', photo=photo_details)
+        if photo_details:
+            return render_template('edit.html', photo=photo_details)
+        else:
+            flash(f"Unable to find photo with ID {id}", category="error")
+            return redirect(url_for('admin'))
+
     elif request.method == 'POST':
         try:
             db.session.query(Photos).filter(Photos.PhotoID==id).update(dict(
@@ -363,12 +368,15 @@ def admin_edit(id):
 @app.route('/admin/delete/<id>', methods=['GET', 'POST'])
 @login_required
 def admin_delete(id):
+    photo = db.session.query(Photos).filter(Photos.PhotoID==id).first()
     if request.method == 'GET':
-        photo_details = db.session.query(Photos).filter(Photos.PhotoID==id).first()
-        return render_template('delete.html', photo=photo_details)
+        if photo:
+            return render_template('delete.html', photo=photo)
+        else:
+            flash(f"Unable to find photo with ID {id}", category="error")
+            return redirect(url_for('admin'))
 
     elif request.method == 'POST':
-        photo = db.session.query(Photos).filter(Photos.PhotoID==id).first()
         if not photo:
             flash(f"Unable to find photo with ID {id} in the database.  No delete was executed", category="error")
             return redirect(url_for('admin'))
