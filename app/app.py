@@ -352,39 +352,44 @@ def admin_edit(id):
             ))
         except Exception:
             db.session.rollback()
-            flash("Update failed", category="error")
+            flash(f"Update failed for photo {id}", category="error")
             return redirect(url_for(request.url))
         else:
             db.session.commit()
-            flash("Update successful", category="success")
+            flash(f"Update successful for photo {id}", category="success")
             return redirect(url_for('admin'))
 
 
-@app.route('/admin/delete/<id>')
+@app.route('/admin/delete/<id>', methods=['GET', 'POST'])
 @login_required
 def admin_delete(id):
-    photo = db.session.query(Photos).filter(Photos.PhotoID==id).first()
-    if not photo:
-        flash(f"Unable to find photo with ID {id} in the database.  No delete was executed", category="error")
-        return redirect(url_for('admin'))
-    else:
-        try:
-            os.remove(os.path.join(photo_upload_dir_path, photo.FileName))
-            os.remove(os.path.join(photo_upload_dir_path, config.photos['THUMBNAIL_DIRECTORY'], photo.FileName))
-        except Exception:
-            flash(f"Unable to delete photo with filename {photo.FileName} from the server", category="error")
-            pass
+    if request.method == 'GET':
+        photo_details = db.session.query(Photos).filter(Photos.PhotoID==id).first()
+        return render_template('delete.html', photo=photo_details)
 
-        try:
-            db.session.delete(photo)
-        except Exception:
-            db.session.rollback()
-            flash(f"Unable to delete photo {photo.FileName} from the database", category="error")
+    elif request.method == 'POST':
+        photo = db.session.query(Photos).filter(Photos.PhotoID==id).first()
+        if not photo:
+            flash(f"Unable to find photo with ID {id} in the database.  No delete was executed", category="error")
+            return redirect(url_for('admin'))
         else:
-            db.session.commit()
-            flash(f"Successfully deleted photo {photo.FileName} from the server and the database", category="success")
-        
-        return redirect(url_for('admin'))
+            try:
+                os.remove(os.path.join(photo_upload_dir_path, photo.FileName))
+                os.remove(os.path.join(photo_upload_dir_path, config.photos['THUMBNAIL_DIRECTORY'], photo.FileName))
+            except Exception:
+                flash(f"Unable to delete photo with filename {photo.FileName} from the server", category="error")
+                pass
+
+            try:
+                db.session.delete(photo)
+            except Exception:
+                db.session.rollback()
+                flash(f"Unable to delete photo {photo.FileName} from the database", category="error")
+            else:
+                db.session.commit()
+                flash(f"Successfully deleted photo {photo.FileName} from the server and the database", category="success")
+            
+            return redirect(url_for('admin'))
 
 
 @app.route('/sitemap')

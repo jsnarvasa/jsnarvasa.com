@@ -1,0 +1,16 @@
+{% extends 'template.html' %}
+
+{% block title %}Delete Photo {{ photo.PhotoID }}{% endblock %}
+
+{% block body %}
+
+    <h3>Delete Photo Confirmation</h3>
+
+    <img src="{{ url_for('static', filename='photos/thumbnail/' + photo.FileName) }}" class="image-fluid" style="display:block; margin:auto; padding: 1em">
+    <p>Are you sure you want to proceed with deleting photo {{ photo.PhotoID }}?</p>
+    <form method=post enctype=multipart/form-data>
+        <button type=submit class="btn btn-danger" value=Delete>Delete</button>
+    </form>
+    <p><a href="{{ url_for('admin') }}" class="btn btn-outline-primary">Cancel</a></p>
+
+{% endblock %}
