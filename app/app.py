@@ -22,13 +22,18 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 ######################################################
 import logging
 
+log_format = "%(asctime)s %(levelname)s %(module)s - %(message)s"
 logs_dir_path = os.path.join(dir_path, 'logs')
 log_file_path = os.path.join(logs_dir_path, 'web.log')
 if not os.path.exists(logs_dir_path):
     os.makedirs(logs_dir_path)
 
-logging.basicConfig(filename=log_file_path, level=logging.INFO)
+logging.basicConfig(
+    filename=log_file_path,
+    level=logging.INFO,
+    format=log_format)
 
+logger = logging.getLogger()
 
 ######################################################
 # Initialise Flask and SQLAlchemy classes
@@ -89,7 +94,8 @@ def photoblog():
 
     try:
         start_date, end_date = Utils.get_start_end_date_params()
-    except ValueError:
+    except ValueError as e:
+        logger.warning(e)
         flash("Invalid date range has been entered", "error")
         return redirect(url_for('photoblog'))
 
@@ -109,7 +115,8 @@ def photoblog_pageNum(pageNum):
     
     try:
         start_date, end_date = Utils.get_start_end_date_params(is_feed=True)
-    except ValueError:
+    except ValueError as e:
+        logger.warning(e)
         flash("Invalid date range has been entered", "error")
         return redirect(url_for('photoblog'))
 
@@ -132,7 +139,8 @@ def area(AreaCode):
 
     try:
         start_date, end_date = Utils.get_start_end_date_params()
-    except ValueError:
+    except ValueError as e:
+        logger.warning(e)
         flash("Invalid date range has been entered", "error")
         return redirect(url_for('area', AreaCode=AreaCode))
 
@@ -152,7 +160,8 @@ def areaCode_pageNum(AreaCode, pageNum):
 
     try:
         start_date, end_date = Utils.get_start_end_date_params(is_feed=True)
-    except ValueError:
+    except ValueError as e:
+        logger.warning(e)
         flash("Invalid date range has been entered", "error")
         return redirect(url_for('areaCode', AreaCode=AreaCode))
 
@@ -190,7 +199,8 @@ def search():
 
     try:
         start_date, end_date = Utils.get_start_end_date_params()
-    except ValueError:
+    except ValueError as e:
+        logger.warning(e)
         flash("Invalid date range has been entered", "error")
         return redirect(url_for('search', q=searchQuery))
 
@@ -211,7 +221,8 @@ def search_pageNum(pageNum):
 
     try:
         start_date, end_date = Utils.get_start_end_date_params(is_feed=True)
-    except ValueError:
+    except ValueError as e:
+        logger.warning(e)
         flash("Invalid date range has been entered", "error")
         return redirect(url_for('search', q=searchQuery))
 
@@ -232,7 +243,8 @@ def upload():
     if request.method == 'POST':
         try:
             file = request.files['file']
-        except Exception:
+        except Exception as e:
+            logger.warning(e)
             flash("No image file was selected", "error")
             return redirect(request.url)
         
@@ -248,7 +260,8 @@ def upload():
             hashed_filename = Photos.photo_hash(os.path.join(photo_upload_dir_path, staging_filename)) + '.' + file_extension
             try:
                 os.rename(os.path.join(photo_upload_dir_path, staging_filename), os.path.join(photo_upload_dir_path, hashed_filename))
-            except FileExistsError:
+            except FileExistsError as e:
+                logger.warning(e)
                 flash("File already exists", 'error')
                 os.remove(os.path.join(photo_upload_dir_path, staging_filename))
                 return redirect(request.url)
@@ -259,7 +272,8 @@ def upload():
                 geotag = Photos.get_geotagging(exif)
                 coordinates = Photos.get_coordinates(geotag)
                 area = Photos.reverse_geocode(coordinates)
-            except Exception:
+            except Exception as e:
+                logger.error(e)
                 flash("Uploaded photo has invalid or no geolocation data")
                 os.remove(os.path.join(photo_upload_dir_path, hashed_filename))
                 return redirect(request.url)
@@ -279,7 +293,8 @@ def upload():
                 Country=area[1])
             try:
                 db.session.add(photo)
-            except exc.IntegrityError:
+            except exc.IntegrityError as e:
+                logger.error(e)
                 flash("Photo already exists in the database")
                 db.session.rollback()
                 os.remove(os.path.join(photo_upload_dir_path, hashed_filename))
@@ -307,18 +322,21 @@ def login():
         # Validation check for username
         try:
             pwd_hash = Users.get_password_hash(request.form['username'])
-        except:
+        except Exception as e:
+            logger.error(e)
             flash(f"Unable to find username {request.form['username']}", "error")
             return redirect(request.referrer)
 
         # Checking entered password, against password for corresponding username in database
         if flask_bcrypt.check_password_hash(pwd_hash, request.form['password']):
             session['username'] = request.form['username']
-            
+            logger.info(f"Successful login for user: {request.form['username']} - from originating IP address {request.remote_addr}")
+
             if request.form.get('redirect_url'):
                 return redirect(request.form.get('redirect_url'))
             return redirect(url_for('admin'))
         else:
+            logger.error(f"Failed login attempt for the user: {request.form['username']} - from originating IP address {request.remote_addr}")
             return redirect(url_for('login'))
 
 
@@ -384,13 +402,15 @@ def admin_delete(id):
             try:
                 os.remove(os.path.join(photo_upload_dir_path, photo.FileName))
                 os.remove(os.path.join(photo_upload_dir_path, config.photos['THUMBNAIL_DIRECTORY'], photo.FileName))
-            except Exception:
+            except Exception as e:
+                logger.error(e)
                 flash(f"Unable to delete photo with filename {photo.FileName} from the server", category="error")
                 pass
 
             try:
                 db.session.delete(photo)
-            except Exception:
+            except Exception as e:
+                logger.error(e)
                 db.session.rollback()
                 flash(f"Unable to delete photo {photo.FileName} from the database", category="error")
             else:
