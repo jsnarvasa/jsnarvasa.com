@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy import exc
 from PIL import Image
 import os
@@ -48,6 +48,8 @@ else:
     app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 1800
+
+app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=90)
 
 # Create photos upload directory
 app.config['UPLOAD_FOLDER'] = config.photos['UPLOAD_DIRECTORY']
@@ -329,6 +331,7 @@ def login():
 
         # Checking entered password, against password for corresponding username in database
         if flask_bcrypt.check_password_hash(pwd_hash, request.form['password']):
+            session.permanent = True
             session['username'] = request.form['username']
             logger.info(f"Successful login for user: {request.form['username']} - from originating IP address {request.remote_addr}")
 
