@@ -313,7 +313,7 @@ def upload():
             return redirect(request.url)
             
     elif request.method == 'GET':
-        return render_template('upload.html')
+        return render_template('photoblog_admin/upload.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -354,7 +354,7 @@ def logout():
 @login_required
 def admin():
     all_photos = db.session.query(Photos).all()
-    return render_template('admin.html', photos=all_photos)
+    return render_template('photoblog_admin/admin.html', photos=all_photos)
 
 
 @app.route('/admin/edit/<id>', methods=['GET', 'POST'])
@@ -363,7 +363,7 @@ def admin_edit(id):
     if request.method == 'GET':
         photo_details = db.session.query(Photos).filter(Photos.PhotoID==id).first()
         if photo_details:
-            return render_template('edit.html', photo=photo_details)
+            return render_template('photoblog_admin/edit.html', photo=photo_details)
         else:
             flash(f"Unable to find photo with ID {id}", category="error")
             return redirect(url_for('admin'))
@@ -392,7 +392,7 @@ def admin_delete(id):
     photo = db.session.query(Photos).filter(Photos.PhotoID==id).first()
     if request.method == 'GET':
         if photo:
-            return render_template('delete.html', photo=photo)
+            return render_template('photoblog_admin/delete.html', photo=photo)
         else:
             flash(f"Unable to find photo with ID {id}", category="error")
             return redirect(url_for('admin'))
