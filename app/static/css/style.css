@@ -91,6 +91,7 @@ div.success {
 div#intro-text {
     padding:2em;
     background-color: #061427;
+    line-height: 1.75em;
 }
 
 h3#intro-text {
