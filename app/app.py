@@ -103,10 +103,12 @@ def photoblog():
 
     if start_date is not None and end_date is not None:
         image_names = Photos.get_photo_list(start_date=start_date, end_date=end_date)
+        image_names_non_paginated = Photos.get_photo_list(perPage=None, start_date=start_date, end_date=end_date)
     else:
         image_names = Photos.get_photo_list()
+        image_names_non_paginated = Photos.get_photo_list(perPage=None)
     
-    geojson = Utils.get_geojson(image_names)
+    geojson = Utils.get_geojson(image_names_non_paginated)
     token = Utils.get_mapbox_token(hostname)
 
     return render_template("gallery.html", image_names=image_names, geojson=geojson, token=token, date_range=date_range, start_date=start_date, end_date=end_date)
@@ -128,9 +130,8 @@ def photoblog_pageNum(pageNum):
         image_names = Photos.get_photo_list(pageNum)
 
     image_list = [image.FileName for image in image_names]
-    geojson = Utils.get_geojson(image_names)
 
-    return jsonify(image_names=image_list, geojson=geojson)
+    return jsonify(image_names=image_list)
 
 
 @app.route('/photoblog/area/<AreaCode>')
@@ -148,10 +149,12 @@ def area(AreaCode):
 
     if start_date is not None and end_date is not None:
         image_names = Photos.filter_photo_area(AreaCode, start_date=start_date, end_date=end_date)
+        image_names_non_paginated = Photos.filter_photo_area(AreaCode, perPage=None, start_date=start_date, end_date=end_date)
     else:
         image_names = Photos.filter_photo_area(AreaCode)
+        image_names_non_paginated = Photos.filter_photo_area(AreaCode, perPage=None)
 
-    geojson = Utils.get_geojson(image_names)
+    geojson = Utils.get_geojson(image_names_non_paginated)
     token = Utils.get_mapbox_token(hostname)
 
     return render_template('gallery.html', image_names=image_names, searchQuery=AreaCode, geojson=geojson, token=token, date_range=date_range, start_date=start_date, end_date=end_date)
@@ -173,9 +176,8 @@ def areaCode_pageNum(AreaCode, pageNum):
         image_names = Photos.filter_photo_area(AreaCode, pageNum)
 
     image_list = [image.FileName for image in image_names]
-    geojson = Utils.get_geojson(image_names)
 
-    return jsonify(image_names=image_list, geojson=geojson)
+    return jsonify(image_names=image_list)
 
 
 @app.route("/getphotodetails")
@@ -208,10 +210,12 @@ def search():
 
     if start_date is not None and end_date is not None:
         image_names = Photos.search_photo_list(searchQuery, start_date=start_date, end_date=end_date)
+        image_names_non_paginated = Photos.search_photo_list(searchQuery, perPage=None, start_date=start_date, end_date=end_date)
     else:
         image_names = Photos.search_photo_list(searchQuery)
+        image_names_non_paginated = Photos.search_photo_list(searchQuery, perPage=None)
 
-    geojson = Utils.get_geojson(image_names)
+    geojson = Utils.get_geojson(image_names_non_paginated)
     token = Utils.get_mapbox_token(hostname)
 
     return render_template('gallery.html', image_names=image_names, searchQuery=searchQuery, geojson=geojson, token=token, date_range=date_range, start_date=start_date, end_date=end_date)
@@ -234,9 +238,8 @@ def search_pageNum(pageNum):
         image_names = Photos.search_photo_list(searchQuery, pageNum)
 
     image_list = [image.FileName for image in image_names]
-    geojson = Utils.get_geojson(image_names)
 
-    return jsonify(image_names=image_list, geojson=geojson)
+    return jsonify(image_names=image_list)
 
 
 @app.route("/upload", methods=['GET', 'POST'])

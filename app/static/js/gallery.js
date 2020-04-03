@@ -104,11 +104,15 @@ $(document).ready(function() {
             images.forEach(FileName => {
                 $('.card-columns').append('<div class="card"><img class="img-fluid gallery-image" id="' + FileName + '" src="static/photos/thumbnail/' + FileName + '"></div>');
             });
+            /* Disabling incremental loading for areas to be shaded in virutal scratchmap
+                as per: https://github.com/jsnarvasa/jsnarvasa.com/issues/4
+                
             additional_geojson = results.geojson.features;
             country_boundaries.features = country_boundaries.features.concat(additional_geojson);
             // Refreshes the map, to load new boundaries
             remove_geojson_layer();
             add_geojson_layer(country_boundaries);
+            */
         });
         isMoreContent(pageCount);
         $(window).on("load", function(){
