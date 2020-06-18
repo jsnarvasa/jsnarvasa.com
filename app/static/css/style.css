@@ -183,3 +183,12 @@ p#intro-text {
 .ui-slider .ui-slider-handle{
     height:1.75em !important;
 }
+
+.card-columns {
+    margin-top:1em;
+    column-gap: 0.25rem;
+}
+
+.card-columns .card {
+    margin-bottom: 0.25rem;
+}

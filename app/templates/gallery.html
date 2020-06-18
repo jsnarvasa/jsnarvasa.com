@@ -30,7 +30,7 @@
         <input type="hidden" id="end_date" name="end">
     </form>
 
-    <div class="card-columns" style="margin-top:1em;">
+    <div class="card-columns">
         {% for image_name in image_names %}
         <div class="card">
             <img class="img-fluid gallery-image" id="{{image_name['FileName']}}" src="{{url_for('static', filename='photos/thumbnail/'+image_name['FileName'])}}">
