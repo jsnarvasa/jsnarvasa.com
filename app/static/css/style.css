@@ -148,7 +148,7 @@ p#intro-text {
 }
 
 #image-on-overlay{
-    max-height:100%;
+    max-height:inherit;
     max-width:100%;
 }
 
