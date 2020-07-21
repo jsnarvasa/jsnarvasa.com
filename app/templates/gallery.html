@@ -22,13 +22,26 @@
 
     <div id="mapid" style="height:500px"></div>
     
-    <input type="text" id="dateRangeText" style="color: {{ generated_color }};" size="100"/>
-    <div id="slider-range"></div>
+    <div class="form-group">
+        <input type="text" id="dateRangeText" style="color: {{ generated_color }};" size="100"/>
+        <div id="slider-range"></div>
 
-    <form method="GET" id="timeRange">
-        <input type="hidden" id="start_date" name="start">
-        <input type="hidden" id="end_date" name="end">
-    </form>
+        <form method="GET" id="timeRange">
+            <input type="hidden" id="start_date" name="start">
+            <input type="hidden" id="end_date" name="end">
+        </form>
+    </div>
+
+    <div class="form-group">
+        <form class="form-row" method="GET" action="/search">
+            <div class="col-9">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search by Location" aria-label="Search" name="q" style="background:transparent;border-color:{{generated_color}}">
+            </div>
+            <div class="col-3">
+                <button class="btn" style="border-color:{{generated_color}}; color:{{generated_color}}; background-color:transparent; width:100%" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
 
     <div class="card-columns">
         {% for image_name in image_names %}
