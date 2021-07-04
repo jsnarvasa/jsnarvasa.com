@@ -12,3 +12,6 @@ __pycache__/
 
 # Ignore config.py file
 /app/config.py
+
+# Ignore .DS_Store Mac
+.DS_Store/
